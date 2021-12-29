@@ -10,7 +10,21 @@
 	crossorigin="anonymous">
 	
 </head>
+<style>
+	.navbar {
+		background-color: #41a4bf;
+	}
+</style>
 <body>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-6 col-md-offset-3">
+				<a class="navbar-brand" href="#" th:href="@{/logout}" style="color:white;">Logout </a>
+			</div>
+		</div>
+	</div>
+</nav>
 
 	<div class="container my-2">
 	<h1>Customers List</h1>

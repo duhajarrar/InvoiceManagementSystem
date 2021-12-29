@@ -39,7 +39,15 @@ public class CustomerController {
 	@PostMapping("/saveCustomer")
 	public String saveCustomer(@ModelAttribute("customer") Customer customer) {
 		// save Customer to database
-		customerService.saveCustomer(customer);
+		customer.setRole("USER");
+		System.out.println(customer.toString());
+		if(customerService.findByEmail(customer.getEmail())==null){
+			customerService.saveCustomerUser(customer);
+		}else{
+			System.out.println(customer.getEmail()+" => Email used,try to register using another email .. " );
+			//throw new RuntimeException(customer.getEmail()+" => Email used,try to register using another email .. " );
+			//return "redirect:/registration?error";
+		}
 		return "redirect:/listCustomer";
 	}
 

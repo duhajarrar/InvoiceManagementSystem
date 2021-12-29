@@ -4,6 +4,7 @@ import com.example.invoicemanagementsystem.model.Customer;
 import com.example.invoicemanagementsystem.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -28,8 +29,13 @@ public class LoginController {
             return "redirect:/listCustomer";
         } else{
             System.out.println("Customer not found for this email :: " + user.getEmail());
-            throw new RuntimeException("Customer not found for this email :: " + user.getEmail());
+            return "redirect:/login?error";
+            //throw new RuntimeException("Customer not found for this email :: " + user.getEmail());
         }
+    }
+    @GetMapping("/logout")
+    public String logout(){
+        return "redirect:login?logout";
     }
 
 

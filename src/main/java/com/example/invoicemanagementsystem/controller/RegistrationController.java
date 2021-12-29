@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @SessionAttributes("customer")
-//@RequestMapping("/registration")
 public class RegistrationController {
 
     @Autowired
@@ -29,8 +28,14 @@ public class RegistrationController {
     public String registerUserAccount(@ModelAttribute("customer") Customer registration) {
         registration.setRole("USER");
         System.out.println(registration.toString());
-        customerService.saveCustomerUser(registration);
-        return "redirect:/registration?success";
+        if(customerService.findByEmail(registration.getEmail())==null){
+            customerService.saveCustomerUser(registration);
+            return "redirect:/registration?success";
+        }else{
+            System.out.println(registration.getEmail()+" => Email used,try to register using another email .. " );
+            //throw new RuntimeException(registration.getEmail()+" => Email used,try to register using another email .. " );
+            return "redirect:/registration?error";
+        }
         //return "redirect:/login";
     }
 }
