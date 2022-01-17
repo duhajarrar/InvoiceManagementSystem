@@ -11,45 +11,42 @@
 	<div class="container">
 		<h1>Invoice Management System</h1>
 		<hr>
-		<h2>Update Invoice</h2>
+		<h2>View Invoice</h2>
 
-		<form action="#" th:action="@{/saveInvoice}" th:object="${invoice}"
-			method="POST">
+		<form action="#"  th:object="${invoice}">
 			
 			<!-- Add hidden form field to handle update -->
 			<input type="hidden" th:field="*{id}" />
 
-		<input type="text" th:field="*{title}" class="form-control mb-4 col-4">
+		<input type="text" th:field="*{title}" class="form-control mb-4 col-4"  disabled='disabled'>
 
-		<input type="text" th:field="*{description}" class="form-control mb-4 col-4">
+		<input type="text" th:field="*{description}" class="form-control mb-4 col-4"  disabled='disabled'>
 
-		<input type="date" th:field="*{creationDate}" class="form-control mb-4 col-4">
+		<input type="date" th:field="*{creationDate}" class="form-control mb-4 col-4"  disabled='disabled'>
 
-		<input type="text" th:field="*{total}" class="form-control mb-4 col-4">
-			<button type="submit" class="btn btn-info col-2"> Update Invoice</button>
+		<input type="number" th:field="*{total}" class="form-control mb-4 col-4"  disabled='disabled'>
+<!--			<button type="submit" class="btn btn-info col-2"> Update Invoice</button>-->
 		</form>
+
+		<h4>Upload Multiple Files:</h4>
+		<form method="POST" enctype="multipart/form-data" th:action="@{/upload-multiple-files/id/{idInvoice}(idInvoice=${invoice.id})}">
+			<input type="file" name="files" multiple> <br/><br/>
+			<button class="btn" style="color:white;background-color: limegreen" type="submit">Add attachment to invoice</button>
+<!--			<a th:href="@{/upload-multiple-files/id/{idInvoice}(idInvoice=${invoice.id})}" class="btn" style="color:white;background-color: limegreen">Add attachment to invoice</a>-->
+
+		</form>
+
+
+		<h2>All Uploaded Files:</h2>
+		<ul>
+			<li th:each="file : ${files}">
+				<a th:href="${file}" target="_blank" th:text="${file.uri}"></a>
+			</li>
+		</ul>
+
 		<hr>
 		
 		<a th:href = "@{/listInvoice}"> Back to Invoice List</a>
-	<hr>
-	<h4>Upload Multiple Files:</h4>
-	<form method="POST" enctype="multipart/form-data" th:action="@{/upload-multiple-files/id/{idInvoice}(idInvoice=${invoice.id})}">
-		<input type="file" name="files" multiple> <br/><br/>
-		<button class="btn" style="color:white;background-color: limegreen" type="submit">Add attachment to invoice</button>
-		<!--			<a th:href="@{/upload-multiple-files/id/{idInvoice}(idInvoice=${invoice.id})}" class="btn" style="color:white;background-color: limegreen">Add attachment to invoice</a>-->
-
-	</form>
-
-
-	<h2>All Uploaded Files:</h2>
-	<ul>
-		<li th:each="file : ${files}">
-			<a th:href="${file}" target="_blank" th:text="${file.uri}"></a>
-		</li>
-	</ul>
-
-	<hr>
-
 	</div>
 	<div class="container my-2">
 		<hr>
@@ -88,14 +85,14 @@
 				<td><input type="number" name="quantity" th:value="${invoiceitem.quantity}" placeholder="quantity" class="form-control mb-4 col-4" th:contenteditable="true"></td>
 				<td><input type="number" name="discount" th:value="${invoiceitem.discount}" placeholder="discount" class="form-control mb-4 col-4" th:contenteditable="true"></td>
 
-				<!--				<td th:text="${invoiceitem.quantity}" contenteditable></td>-->
-				<!--				<td th:text="${invoiceitem.discount}" contenteditable></td>-->
+<!--				<td th:text="${invoiceitem.quantity}" contenteditable></td>-->
+<!--				<td th:text="${invoiceitem.discount}" contenteditable></td>-->
 				<td th:text="${invoiceitem.priceafterdiscount}"></td>
 
 
 				<!--				<td th:text="${invoiceItem.total}"></td>-->
 				<td>
-					<!--					<a th:href="@{/showFormForUpdateInvoice/{id}(id=${invoice.id})}" class="btn btn-primary">Update</a>-->
+<!--					<a th:href="@{/showFormForUpdateInvoice/{id}(id=${invoice.id})}" class="btn btn-primary">Update</a>-->
 					<a th:href="@{/deleteItemFromInvoivce/invoiceId/{idInvoice}/InvoiceitemId/{idInvoiceitem}(idInvoice=${invoice.id},idInvoiceitem=${invoiceitem.id})}" class="btn btn-danger">
 						Delete</a>
 					<a th:href="@{/updateItemFromInvoivce/invoiceId/{idInvoice}/idInvoiceitem/{idInvoiceitem}/q/{q}/d/{d}(idInvoice=${invoice.id},idInvoiceitem=${invoiceitem.id},q=${invoiceitem.quantity},d=${invoiceitem.discount})}" class="btn btn-info">
@@ -147,11 +144,11 @@
 			</thead>
 			<tbody>
 			<tr th:each="item : ${listItem}">
-				<td th:text="${item.name}"></td>
-				<td th:text="${item.price}"></td>
-				<td><input type="number" name="quantity" id="quantity" placeholder="quantity" value="1" class="form-control mb-4 col-4"></td>
-				<td><input type="number" name="discount" id="discount" placeholder="discount" value="0" class="form-control mb-4 col-4"></td>
-				<td><a th:href="@{/addItemToInvoivce/invoiceId/{idInvoice}/itemId/{idItem}/q/{quantity}/d/{discount}(idInvoice=${invoice.id},idItem=${item.id})}" class="btn" style="color:white;background-color: limegreen">Add item to invoice</a></td>
+			<td th:text="${item.name}"></td>
+			<td th:text="${item.price}"></td>
+			<td><input type="number" name="quantity" id="quantity" placeholder="quantity" value="1" class="form-control mb-4 col-4"></td>
+			<td><input type="number" name="discount" id="discount" placeholder="discount" value="0" class="form-control mb-4 col-4"></td>
+			<td><a th:href="@{/addItemToInvoivce/invoiceId/{idInvoice}/itemId/{idItem}/q/{quantity}/d/{discount}(idInvoice=${invoice.id},idItem=${item.id})}" class="btn" style="color:white;background-color: limegreen">Add item to invoice</a></td>
 
 				<!--				<td> <a th:href="@{/updateCustomer/{id}(id=${item.id})}" class="btn btn-primary">Update</a>-->
 				<!--					<a th:href="@{/deleteCustomer/{id}(id=${item.id})}" class="btn btn-danger">Delete</a>-->
@@ -160,8 +157,6 @@
 			</tbody>
 		</table>
 	</div>
-
-
 
 
 

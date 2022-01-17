@@ -28,7 +28,17 @@
 
 	<div class="container my-2">
 	<h1>Customers List</h1>
-	
+		<div th:if="${param.success}">
+			<div class="alert alert-info">Customer successfully added!</div>
+		</div>
+
+		<div th:if="${param.success1}">
+			<div class="alert alert-info">Customer info updated!</div>
+		</div>
+
+		<div th:if="${param.delete}">
+			<div class="alert alert-info">Customer deleted successfully!</div>
+		</div>
 	<a th:href = "@{/showNewCustomerForm}" class="btn btn-primary btn-sm mb-3"> Add Customer </a>
 	
 		<table border="1" class = "table table-striped table-responsive-md">
@@ -43,8 +53,8 @@
 							Customer Last Name</a>
 					</th>
 					<th>
-					<a th:href="@{'/page/' + ${currentPage} + '?sortField=email&sortDir=' + ${reverseSortDir}}">
-							Customer Email</a>
+					<a th:href="@{'/page/' + ${currentPage} + '?sortField=username&sortDir=' + ${reverseSortDir}}">
+							Customer username</a>
 					</th>
 					<th> Actions </th>
 				</tr>
@@ -53,15 +63,15 @@
 				<tr th:each="customer : ${listCustomers}">
 					<td th:text="${customer.firstName}"></td>
 					<td th:text="${customer.lastName}"></td>
-					<td th:text="${customer.email}"></td>
-					<td> <a th:href="@{/showFormForUpdate/{id}(id=${customer.id})}" class="btn btn-primary">Update</a>
+					<td th:text="${customer.username}"></td>
+					<td> <a th:href="@{/updateCustomer/{id}(id=${customer.id})}" class="btn btn-primary">Update</a>
 					    <a th:href="@{/deleteCustomer/{id}(id=${customer.id})}" class="btn btn-danger">Delete</a>
 					</td>
 				</tr>
 			</tbody>
 		</table>
 		
-		<div th:if = "${totalPages > 1}">
+		<div>
 			<div class = "row col-sm-10">
 				<div class = "col-sm-2">
 					Total Rows: [[${totalItems}]] 

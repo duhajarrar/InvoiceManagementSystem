@@ -13,12 +13,20 @@
 		<h1>Customer Management System</h1>
 		<hr>
 		<h2>Save Customer</h2>
+		<div th:if="${param.success}">
+			<div class="alert alert-info">You've successfully registered
+				to our awesome app!</div>
+		</div>
+
+		<div th:if="${param.error}">
+			<div class="alert alert-danger">username used,try to add customer with another username</div>
+		</div>
 
 		<form action="#" th:action="@{/saveCustomer}" th:object="${customer}"
 			method="POST">
 
 			<div th:if="${param.error}">
-				<div class="alert alert-danger">Email used,try to register using another email</div>
+				<div class="alert alert-danger">username used,try to register using another username</div>
 			</div>
 
 			<input type="text" th:field="*{firstName}"
@@ -27,8 +35,8 @@
 				<input type="text" th:field="*{lastName}"
 				placeholder="Customer Last Name" class="form-control mb-4 col-4">
 				
-				<input type="text" th:field="*{email}"
-				placeholder="Customer Email" class="form-control mb-4 col-4">
+				<input type="text" th:field="*{username}"
+				placeholder="Customer username" class="form-control mb-4 col-4">
 				
 				<button type="submit" class="btn btn-info col-2"> Save Customer</button>
 		</form>

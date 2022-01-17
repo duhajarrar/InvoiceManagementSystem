@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Invoice Management System</title>
+
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+</head>
+<body>
+	<div class="container">
+		<h1>Invoice Management System</h1>
+		<hr>
+		<h2>View Invoice</h2>
+		<div style="display: inline-block;">
+<div >
+		<form action="#"  th:object="${invoice}">
+			
+			<!-- Add hidden form field to handle update -->
+			<input type="hidden" th:field="*{id}" />
+
+		<input type="text" th:field="*{title}" class="form-control mb-4 col-4"  disabled='disabled'>
+
+		<input type="text" th:field="*{description}" class="form-control mb-4 col-4"  disabled='disabled'>
+
+		<input type="date" th:field="*{creationDate}" class="form-control mb-4 col-4"  disabled='disabled'>
+
+		<input type="number" th:field="*{total}" class="form-control mb-4 col-4"  disabled='disabled'>
+<!--			<button type="submit" class="btn btn-info col-2"> Update Invoice</button>-->
+		</form>
+</div>
+
+
+		<div style="">
+		<h2>All Uploaded Files:</h2>
+		<ul>
+				<div  th:if="!${#lists.isEmpty(files)}">
+				<li th:each="file : ${files}">
+					<a th:href="${file.uri}" target="_blank" th:text="${file.uri}"></a>
+				</li>
+			</div>
+			<div th:if="${#lists.isEmpty(files)}">
+				This invoice doesn't have any files.
+			</div>
+		</ul>
+		</div>
+	</div>
+		<hr>
+		
+		<a th:href = "@{/listInvoice}"> Back to Invoice List</a>
+	</div>
+	<div class="container my-2">
+		<hr>
+		<h2>Invoice Items list</h2>
+		<table border="1" class = "table table-striped table-responsive-md">
+			<thead>
+			<tr>
+				<th>
+					<a th:href="@{'/page/' + ${currentPage} + '?sortField=id&sortDir=' + ${reverseSortDir}}">
+						Name</a>
+				</th>
+				<th>
+					<a th:href="@{'/page/' + ${currentPage} + '?sortField=id&sortDir=' + ${reverseSortDir}}">
+						Price</a>
+				</th>
+				<th>
+					<a th:href="@{'/page/' + ${currentPage} + '?sortField=description&sortDir=' + ${reverseSortDir}}">
+						quantity</a>
+				</th>
+				<th>
+					<a th:href="@{'/page/' + ${currentPage} + '?sortField=discount&sortDir=' + ${reverseSortDir}}">
+						discount</a>
+				</th>
+				<th>
+					<a th:href="@{'/page/' + ${currentPage} + '?sortField=priceafterdiscount&sortDir=' + ${reverseSortDir}}">
+						Price After Discount</a>
+				</th>
+
+				<th> Actions </th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr th:each="invoiceitem : ${invoiceItemList}">
+				<td th:text="${invoiceitem.item.name}"></td>
+				<td th:text="${invoiceitem.item.price}"></td>
+				<td><input type="number" name="quantity" th:value="${invoiceitem.quantity}" placeholder="quantity" class="form-control mb-4 col-4" th:contenteditable="true"></td>
+				<td><input type="number" name="discount" th:value="${invoiceitem.discount}" placeholder="discount" class="form-control mb-4 col-4" th:contenteditable="true"></td>
+
+<!--				<td th:text="${invoiceitem.quantity}" contenteditable></td>-->
+<!--				<td th:text="${invoiceitem.discount}" contenteditable></td>-->
+				<td th:text="${invoiceitem.priceafterdiscount}"></td>
+
+
+				<!--				<td th:text="${invoiceItem.total}"></td>-->
+				<td>
+<!--					<a th:href="@{/showFormForUpdateInvoice/{id}(id=${invoice.id})}" class="btn btn-primary">Update</a>-->
+					<a th:href="@{/deleteItemFromInvoivce/invoiceId/{idInvoice}/InvoiceitemId/{idInvoiceitem}(idInvoice=${invoice.id},idInvoiceitem=${invoiceitem.id})}" class="btn btn-danger">
+						Delete</a>
+					<a th:href="@{/updateItemFromInvoivce/invoiceId/{idInvoice}/idInvoiceitem/{idInvoiceitem}/q/{q}/d/{d}(idInvoice=${invoice.id},idInvoiceitem=${invoiceitem.id},q=${invoiceitem.quantity},d=${invoiceitem.discount})}" class="btn btn-info">
+						Update</a>
+				</td>
+				<!--					<a th:href="@{/viewInvoice/{id}(id=${invoice.id})}" class="btn" style="color:white;background-color: limegreen">View</a>-->
+
+
+			</tr>
+			</tbody>
+		</table>
+
+
+		<hr>
+
+	</div>
+
+
+
+</body>
+</html>

@@ -1,4 +1,80 @@
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org" lang="en">-->
 
+<!--<head ></head>-->
+
+<!--<body>-->
+
+<!--<header></header>-->
+
+<!--<div class="container py-4">-->
+<!--    <div class="row">-->
+<!--        <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">-->
+<!--            <div class="card card-signin my-3 shadow p-3 mb-5 bg-white">-->
+<!--                <div class="card-body">-->
+
+<!--                    <p class="text-center">HINT: admin | 12345</p>-->
+
+<!--                    <form class="form-signin" th:action="@{/login}" method="post">-->
+<!--                        <div class="md-form mb-5 ">-->
+<!--                            <input type="text" name="username" id="username"-->
+<!--                                   class="form-control" placeholder=" " required /> <label-->
+<!--                                for="username" class="control-label"-->
+<!--                              ></label>-->
+<!--                        </div>-->
+
+<!--                        <div class="md-form mb-4">-->
+<!--                            <input type="password" name="password" id="password"-->
+<!--                                   class="form-control" placeholder=" " required /> <label-->
+<!--                                for="password" ></label>-->
+<!--                        </div>-->
+
+<!--                        <div class="custom-control custom-checkbox ml-2 mb-4">-->
+<!--                            <input type="checkbox" class="custom-control-input mr-3"-->
+<!--                                   id="customCheck"> <label class="custom-control-label"-->
+<!--                                                            for="customCheck"></label>-->
+<!--                        </div>-->
+
+<!--                        <button-->
+<!--                                class="btn btn-lg btn-primary btn-block text-uppercase mt-4"-->
+<!--                                type="submit" ></button>-->
+
+<!--                        <div class="form-group">-->
+<!--                            <a href="/" th:href="@{/registration}"-->
+<!--                               class="btn btn-lg btn-outline-primary btn-block text-uppercase mt-2"-->
+<!--                              ></a>-->
+<!--                        </div>-->
+<!--                    </form>-->
+
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
+
+<!--<footer></footer>-->
+
+<!--<script type="text/javascript">-->
+<!--    var input = $("input[type=text], input[type=password]");-->
+
+<!--    input.bind('keyup focusin', function(element, i) {-->
+<!--        $(this).siblings('label').addClass('active');-->
+<!--        input.on("blur", function() {-->
+
+<!--            if ($(this).val() !== "") {-->
+<!--                $(this).next().addClass('active');-->
+<!--            } else {-->
+<!--                $(this).next().removeClass('active');-->
+<!--            }-->
+
+<!--        })-->
+<!--    });-->
+<!--</script>-->
+
+<!--</body>-->
+
+<!--</html>-->
 <!DOCTYPE html>
 <html>
 <head>
@@ -41,50 +117,63 @@
         <div class="col-md-6 col-md-offset-3">
 
             <h1>User Login Page</h1>
-            <form th:action="@{/login}" method="post"
-                  th:object="${customer}">
+            <!-- error message -->
+            <div th:if="${param.error}">
+                <div class="alert alert-danger">Invalid username or
+                    password.</div>
+            </div>
+
+            <!-- logout message -->
+            <div th:if="${param.logout}">
+                <div class="alert alert-info">
+                    You have been logged out.</div>
+            </div>
 
 
-                <!-- error message -->
-                <div th:if="${param.error}">
-                    <div class="alert alert-danger">Invalid email or
-                        password.</div>
-                </div>
+<!--                <form action="#" th:action="@{/login}" th:object="${customer}"-->
+<!--                      method="POST">-->
+            <form class="form-signin" th:action="@{/login}" method="post">
 
-                <!-- logout message -->
-                <div th:if="${param.logout}">
-                    <div class="alert alert-info">
-                        You have been logged out.</div>
-                </div>
+<!--                <div class="form-group">-->
+                    <label for="username"> Username </label>
+                <input type="text" name="username" id="username"
+                       class="form-control" placeholder=" " required
+                           autofocus="autofocus"  />
+<!--                </div>-->
 
-                <div class="form-group">
-                    <label for="email"> Email </label> :
-                    <input type="text" class="form-control" id="email"
-                           name="email" placeholder="Enter Email ID"
-                           autofocus="autofocus">
-                </div>
-
-                <div class="form-group">
+<!--                <div class="form-group">-->
                     <label for="password">Password</label>:
-                    <input type="password" id="password" name="password"
-                           class="form-control" placeholder="Enter Password" />
-                </div>
+                <input type="password" name="password" id="password"
+                       class="form-control" placeholder=" " required />
+<!--                </div>-->
 
-                <div class="form-group">
-                    <div class="row">
-                        <div class="col-sm-6 col-sm-offset-3">
-                            <input type="submit" name="login-submit"
-                                   id="login-submit"
-                                   class="form-control btn btn-primary"
-                                   value="Log In" />
-                            <div class="form-group">
-                                <a href="/" th:href="@{/listCustomer}"
-                                   class="btn btn-lg btn-outline-primary btn-block text-uppercase mt-2"></a>
-                            </div>
 
-                        </div>
-                    </div>
-                </div>
+<!--                <div class="form-group">-->
+<!--                    <button type="submit" class="btn btn-primary" id="submit">-->
+<!--                        Login</button>-->
+<!--                    <a th:href="@{/loginUser/username/${customer.username}/password/${customer.password}}" class="btn" style="color:white;background-color: #41a4bf">Login</a>-->
+                    <button type="submit" class="btn btn-info col-2">Login</button>
+
+<!--                    <div class="form-group">-->
+<!--                        <a href="/" th:href="@{/listCustomer}"-->
+<!--                           class="btn btn-lg btn-outline-primary btn-block text-uppercase mt-2"></a>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="form-group">-->
+<!--                    <div class="row">-->
+<!--                        <div class="col-sm-6 col-sm-offset-3">-->
+<!--                            <input type="submit" name="login-submit"-->
+<!--                                   id="login-submit"-->
+<!--                                   class="form-control btn btn-primary"-->
+<!--                                   value="Log In" />-->
+<!--                            <div class="form-group">-->
+<!--                                <a href="/" th:href="@{/listCustomer}"-->
+<!--                                   class="btn btn-lg btn-outline-primary btn-block text-uppercase mt-2"></a>-->
+<!--                            </div>-->
+
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
             </form>
             <div class="form-group">
                     <span>New user? <a href="/" th:href="@{/registration}">

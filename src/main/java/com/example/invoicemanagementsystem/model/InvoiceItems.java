@@ -3,43 +3,36 @@ package com.example.invoicemanagementsystem.model;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
 @Table(name = "invoice_items")
-public class InvoiceItems {
+public class InvoiceItems implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
-    private String title;
-
-    @Column
-    private Long price;
-
-    @Column
-    private Long quantity;
-
-    @ManyToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "item_id")
+    //@Id
     private Item item;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @Temporal(TemporalType.DATE)
-    @Column(name="creation_date")
-    private Date creationDate;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "invoice_id")
+    private Invoice invoice;
 
-    public InvoiceItems() {
-    }
+//    @Column
+//    private String title;
 
-    public InvoiceItems(String title, Long price, Long quantity, Item item, Date creationDate) {
-        this.title = title;
-        this.price = price;
-        this.quantity = quantity;
-        this.item = item;
-        this.creationDate = creationDate;
-    }
+    @Column
+    private int quantity;
+
+    @Column
+    private int discount;
+
+    @Column
+    private int priceafterdiscount;
 
     public Long getId() {
         return id;
@@ -49,27 +42,30 @@ public class InvoiceItems {
         this.id = id;
     }
 
-    public String getTitle() {
-        return title;
+
+    public InvoiceItems() {
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public InvoiceItems(int quantity, int discount, Item item) {
+//        this.title = title;
+        this.quantity = quantity;
+        this.discount = discount;
+        this.item = item;
     }
 
-    public Long getPrice() {
-        return price;
-    }
+//    public String getTitle() {
+//        return title;
+//    }
+//
+//    public void setTitle(String title) {
+//        this.title = title;
+//    }
 
-    public void setPrice(Long price) {
-        this.price = price;
-    }
-
-    public Long getQuantity() {
+    public int getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(Long quantity) {
+    public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
 
@@ -81,32 +77,31 @@ public class InvoiceItems {
         this.item = item;
     }
 
-    public Date getCreationDate() {
-        return creationDate;
+    public int getDiscount() {
+        return discount;
     }
 
-    public void setCreationDate(Date creationDate) {
-        this.creationDate = creationDate;
+    public void setDiscount(int discount) {
+        this.discount = discount;
     }
 
-    public Double calculateTotal() {
-        return quantity.doubleValue() * item.getPrice();
+    public int getPriceafterdiscount() {
+        this.priceafterdiscount=0;
+        this.priceafterdiscount=(this.quantity * this.item.getPrice() *(100-this.discount))/100;
+        return this.priceafterdiscount;
+    }
+
+    public void setPriceafterdiscount(int priceafterdiscount) {
+        this.priceafterdiscount = priceafterdiscount;
     }
 
     @Override
     public String toString() {
         return "InvoiceItems{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", price=" + price +
+                " priceafterdiscount=" + priceafterdiscount +
                 ", quantity=" + quantity +
+                ", discount=" + discount +
                 ", item=" + item +
-                ", creationDate=" + creationDate +
                 '}';
     }
-
-
-
-
-
 }

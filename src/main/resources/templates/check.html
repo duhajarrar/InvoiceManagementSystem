@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      lang="en"
+      xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Upload</title>
+</head>
+<body>
+
+<form th:action="@{/userFile}" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+    <ul>
+        <li th:each="search : ${searchTypes}">
+            <input type="checkbox" name="searchValues" th:value="${search}"/>
+            <label th:text="${search}"></label>
+        </li>
+    </ul>
+    <p><input type="file" name="myFile" id="myFile"/></p>
+    <p><input type="submit" class="btn btn-success" value="Submit Customer Data"/></p>
+    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+</form>
+
+</body>
+</html>

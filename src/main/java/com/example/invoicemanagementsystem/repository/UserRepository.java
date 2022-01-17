@@ -1,12 +1,10 @@
-package com.example.invoicemanagementsystem.repository;//package net.javaguides.springboot.repository;
-//
-//import net.javaguides.springboot.model.User;
-//import org.springframework.data.jpa.repository.JpaRepository;
-//import org.springframework.stereotype.Repository;
-//
-//@Repository
-//public interface UserRepository extends JpaRepository<User, Long> {
-//    User findByEmail(String email);
-//    //User findByUsername(String username);
-//   // List<User> findAll();
-//}
+package com.example.invoicemanagementsystem.repository;
+
+import com.example.invoicemanagementsystem.model.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface UserRepository extends JpaRepository<User, Long>{
+    User findByUsername(String username);
+}

@@ -13,7 +13,7 @@ import java.util.List;
 @Table(name = "invoices")
 public class Invoice {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column
@@ -28,31 +28,26 @@ public class Invoice {
     private Date creationDate;
 
     @Column
-    private Double total;
+    private long total;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonBackReference
-    private Customer customer;
+    private User user;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "invoice_id")
     private List<InvoiceItems> items;
 
-//    @PrePersist
-//    public void prePersist() {
-//        creationDate = new Date();
-//    }
-
     public Invoice() {
         this.items=new ArrayList<InvoiceItems>();
     }
 
-    public Invoice(String title, String description, Date creationDate, Double total, Customer customer, List<InvoiceItems> items) {
+    public Invoice(String title, String description, Date creationDate, long total, User user, List<InvoiceItems> items) {
         this.title = title;
         this.description = description;
         this.creationDate = creationDate;
         this.total = total;
-        this.customer = customer;
+        this.user = user;
         this.items = items;
     }
 
@@ -89,12 +84,12 @@ public class Invoice {
     }
 
     @XmlTransient
-    public Customer getCustomer() {
-        return customer;
+    public User getUser() {
+        return user;
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    public void setUser(User user) {
+        this.user = user;
     }
 
 
@@ -110,14 +105,21 @@ public class Invoice {
         this.items.add(item);
     }
 
+    public void updateItem(InvoiceItems item) {
+        this.items.remove(items.indexOf(item));
+        this.items.add(item);
+        System.out.println(item+"****************/////////////////////////////");
+        System.out.println(this.items);
+    }
+
     public void deleteItem(InvoiceItems item) {
         this.items.remove(items.indexOf(item));
     }
 
-    public Double getTotal() {
-        this.total = 0.0;
+    public long getTotal() {
+        this.total = (long) 0.0;
         for(int i = 0; i < items.size(); i++) {
-            this.total += items.get(i).calculateTotal();
+            this.total += items.get(i).getPriceafterdiscount();
         }
         return this.total;
     }

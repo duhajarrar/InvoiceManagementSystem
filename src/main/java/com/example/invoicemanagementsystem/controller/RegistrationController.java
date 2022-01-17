@@ -1,20 +1,29 @@
 package com.example.invoicemanagementsystem.controller;
-import com.example.invoicemanagementsystem.model.Customer;
-import com.example.invoicemanagementsystem.service.CustomerService;
+//import com.example.invoicemanagementsystem.model.Role;
+import com.example.invoicemanagementsystem.model.Role;
+import com.example.invoicemanagementsystem.model.User;
+import com.example.invoicemanagementsystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @SessionAttributes("customer")
 public class RegistrationController {
 
+  @Autowired
+  private BCryptPasswordEncoder passwordEncoder=new BCryptPasswordEncoder();
+
     @Autowired
-    private CustomerService customerService;
+    private UserService userService;
 
     @ModelAttribute("customer")
-    public Customer UserRegistration() {
-        return new Customer();
+    public User UserRegistration() {
+        return new User();
     }
 
     //@RequestMapping(value = "/registration" ,method = RequestMethod.GET)
@@ -25,15 +34,22 @@ public class RegistrationController {
 
 //    @PostMapping("/registration")
     @RequestMapping(value = "/registration" ,method = RequestMethod.POST)
-    public String registerUserAccount(@ModelAttribute("customer") Customer registration) {
-        registration.setRole("USER");
+    public String registerUserAccount(@ModelAttribute("customer") User registration) {
+        //			List<Role> role=new ArrayList<>();
+//			role.add(new Role("USER"));
+//			registration.setRoles(role);
+        List<Role> role=new ArrayList<>();
+        role.add(new Role("USER"));
+        registration.setAuthorities(role);
+
+        registration.setPassword(passwordEncoder.encode(registration.getPassword()));
         System.out.println(registration.toString());
-        if(customerService.findByEmail(registration.getEmail())==null){
-            customerService.saveCustomerUser(registration);
+        if(userService.findByUsername(registration.getUsername())==null){
+            userService.saveUser(registration);
             return "redirect:/registration?success";
         }else{
-            System.out.println(registration.getEmail()+" => Email used,try to register using another email .. " );
-            //throw new RuntimeException(registration.getEmail()+" => Email used,try to register using another email .. " );
+            System.out.println(registration.getUsername()+" => username used,try to register using another username .. " );
+            //throw new RuntimeException(registration.getusername()+" => username used,try to register using another username .. " );
             return "redirect:/registration?error";
         }
         //return "redirect:/login";

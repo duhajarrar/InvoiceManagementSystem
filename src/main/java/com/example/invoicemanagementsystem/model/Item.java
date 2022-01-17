@@ -14,20 +14,10 @@ public class Item {
     private Long id;
 
     @Column
-    private String title;
+    private String name;
 
     @Column
-    private Long price;
-
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @Temporal(TemporalType.DATE)
-    @Column(name="creation_date")
-    private Date creationDate;
-
-//    @PrePersist
-//    public void prePersist() {
-//        creationDate = new Date();
-//    }
+    private int price;
 
     public Long getId() {
         return id;
@@ -37,27 +27,28 @@ public class Item {
         this.id = id;
     }
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public Long getPrice() {
+    public int getPrice() {
         return price;
     }
 
-    public void setPrice(Long price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 
-    public Date getCreationDate() {
-        return creationDate;
-    }
-
-    public void setCreationDate(Date creationDate) {
-        this.creationDate = creationDate;
+    @Override
+    public String toString() {
+        return "Item{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                '}';
     }
 }

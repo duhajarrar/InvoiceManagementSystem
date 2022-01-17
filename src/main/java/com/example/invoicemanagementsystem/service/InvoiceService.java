@@ -28,9 +28,7 @@ public class InvoiceService {
 
 	public Invoice getInvoiceById(long id) {
 		Invoice invoice = invoiceRepository.findById(id);
-		//Invoice invoice = null;
 		if (invoice!=null) {
-			//invoice = optional.get();
 			return invoice;
 		} else {
 			throw new RuntimeException(" Invoice not found for id :: " + id);
@@ -41,11 +39,11 @@ public class InvoiceService {
 		this.invoiceRepository.deleteById(id);
 	}
 
-	public Page<Invoice> findPaginatedInvoice(int pageNo, int pageSize, String sortField, String sortDirection) {
+	public Page<Invoice> findPaginatedInvoice(int pageNo, int pageSize, String sortField, String sortDirection,long userId) {
 		Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() :
 			Sort.by(sortField).descending();
 
 		Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
-		return this.invoiceRepository.findAll(pageable);
+		return this.invoiceRepository.findInvoiceByUser_Id(userId,pageable);
 	}
 }
