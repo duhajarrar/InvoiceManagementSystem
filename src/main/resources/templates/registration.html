@@ -19,13 +19,22 @@
 <body>
 
 <!-- create navigation bar ( header) -->
-<nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6 col-md-offset-3">
-            <a class="navbar-brand" href="#" th:href="@{/login}" style="color:white;">Login </a>
-        </div>
-    </div>
+<!--<nav class="navbar navbar-inverse navbar-fixed-top">-->
+<!--    <div class="container">-->
+<!--        <div class="row">-->
+<!--            <div class="col-md-6 col-md-offset-3">-->
+<!--            <a class="navbar-brand" href="#" th:href="@{/login}" style="color:white;">Login </a>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    </div>-->
+<!--</nav>-->
+
+<nav class="navbar navbar-inverse navbar-fixed-top" style="background-color: #41a4bf;">
+    <div class="container" style="float:left;display: flex; flex-direction: row;margin-top:10px;margin-left: 150px">
+<!--        <img src="../static/img/payment.png" width="40" height="40"/>-->
+        <a class="navbar-brand" style="color:white;margin-left: 10px">Invoice Management System </a>
+        <!--		<a class="navbar-brand" style="margin-left: 700px;color:white;" href="#" th:href="@{/logout}">Logout </a>-->
+
     </div>
 </nav>
 
@@ -37,39 +46,33 @@
 
             <!-- success message -->
             <div th:if="${param.success}">
-                <div class="alert alert-info">You've successfully registered !</div>
+                <div class="alert alert-info" style="background-color: lightgreen;color: darkolivegreen;border-color:lightgreen">You've successfully registered !</div>
             </div>
 
             <div th:if="${param.error}">
                 <div class="alert alert-danger">Username used,try to register using another username</div>
             </div>
 
-            <h1>Registration</h1>
 
             <form th:action="@{/registration}" method="post"
-                  th:object="${customer}">
+                  th:object="${customer}"style="background-color: aliceblue;border-color: aliceblue;border-radius: 15px;border-style: solid;width: 700px;height:600px">
+                <h1 style="margin-left: 260px;margin-top: 30px">Sign Up</h1>
+
                 <div class="form-group">
-                    <label class="control-label" for="firstName">
+                    <label class="control-label" for="firstName"  style="margin-left: 100px;margin-top: 20px">
                         First Name </label>
                     <input id="firstName" class="form-control" minlength="3"
                            th:field="*{firstName}" required
-                           autofocus="autofocus" />
+                           autofocus="autofocus" style="margin-left: 100px;margin-right: 100px;width: 500px" />
                 </div>
 
                 <div class="form-group">
-                    <label class="control-label" for="lastName">
+                    <label class="control-label" for="lastName"  style="margin-left: 100px">
                         Last Name </label> <input id="lastName" minlength="3"
                                                   class="form-control" th:field="*{lastName}"
-                                                  required autofocus="autofocus" />
+                                                  required autofocus="autofocus"style="margin-left: 100px;margin-right: 100px;width: 500px" />
                 </div>
 
-                <!--                <div class="form-group">-->
-                <!--                    <label class="control-label" for="username">-->
-                <!--                        User Name </label>-->
-                <!--                    <input id="username" class="form-control" minlength="4"-->
-                <!--                           th:field="*{username}" required-->
-                <!--                           autofocus="autofocus" />-->
-                <!--                </div>-->
 
                 <div class="form-group">
 <!--                    <label class="control-label" for="email"> Email-->
@@ -77,66 +80,64 @@
 <!--                                    title="Invalid email address"-->
 <!--                                    th:field="*{email}" required autofocus="autofocus"-->
 <!--                />-->
-                    <label class="control-label" for="username">
+                    <label class="control-label" for="username" style="margin-left: 100px">
                         Username </label> <input id="username" minlength="3"
                                                   class="form-control" th:field="*{username}"
-                                                  required autofocus="autofocus" />
+                                                  required autofocus="autofocus" style="margin-left: 100px;margin-right: 100px;width: 500px" />
                 </div>
 
 
+
+                <div class="form-group">
+                    <label class="control-label" for="password" style="margin-left: 100px">
+                        Password </label> <input id="password" minlength="5"
+                                                 class="form-control" type="password" onkeyup='check();'
+                                                 th:field="*{password}" required
+                                                 autofocus="autofocus" style="margin-left: 100px;margin-right: 100px;width: 500px" />
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label" for="confirmPassword" style="margin-left: 100px">
+                        Confirm Password </label> <input id="confirmPassword" minlength="5"
+                                                        class="form-control" type="password" onkeyup='check();'
+                                                        required
+                                                        autofocus="autofocus" style="margin-left: 100px;margin-right: 100px;width: 500px" />
+                    <span id='message'></span>
+                </div>
                 <script>
 
                     var check = function() {
                         if (document.getElementById('password').value ==
                             document.getElementById('confirmPassword').value) {
                             document.getElementById('message').style.color = 'green';
-                            document.getElementById('message').innerHTML = 'matching';
+                            document.getElementById('message').innerHTML = 'matched';
                             document.getElementById('submit').disabled = false;
                         } else {
                             document.getElementById('message').style.color = 'red';
-                            document.getElementById('message').innerHTML = 'not matching';
+                            document.getElementById('message').innerHTML = 'not matched';
                             document.getElementById('submit').disabled = true;
                         }
-
-
                     }
 
                 </script>
-                <div class="form-group">
-                    <label class="control-label" for="password">
-                        Password </label> <input id="password" minlength="5"
-                                                 class="form-control" type="password" onkeyup='check();'
-                                                 th:field="*{password}" required
-                                                 autofocus="autofocus" />
-                </div>
-
-                <div class="form-group">
-                    <label class="control-label" for="confirmPassword">
-                        confirmPassword </label> <input id="confirmPassword" minlength="5"
-                                                        class="form-control" type="password" onkeyup='check();'
-                                                        th:field="*{password}" required
-                                                        autofocus="autofocus" />
-                    <span id='message'></span>
-                </div>
-
-                <div class="custom-control custom-checkbox ml-2 mb-4"
+                <div class="custom-control custom-checkbox ml-2 mb-4" style="margin-left: 100px;margin-right: 100px;width: 500px"
                      th:classappend="${#fields.hasErrors('enabled')}? 'has-error':''">
 
                     <input type="checkbox" class="custom-control-input mr-3"
-                           id="enabled" th:field="*{enabled}" required /> <label
-                        class="custom-control-label" for="enabled">
+                           id="enabled" th:field="*{enabled}" required  /> <label
+                        class="custom-control-label" for="enabled"  >
                     <p class="font-small">
-                        <a href="#">I agree with the terms and conditions for Registration.</a>
+                        <a  href="#">I agree with the terms and conditions for Registration.</a>
                     </p>
 
                 </label>
 
                 </div>
 
-                <div class="form-group">
-                    <button type="submit" class="btn btn-primary" id="submit">
-                        Register</button>
-                    <span>Already registered? <a href="/"
+                <div class="form-group" >
+                    <button type="submit" class="btn btn-primary" id="submit" style="font-size: 20px;background-color: #41a4bf;margin-top: 25px;margin-left: 100px;margin-right: 100px;width: 500px">
+                        Sign Up</button>
+                    <span style="margin-left: 100px;margin-right: 100px;margin-top: 10px">Already registered? <a href="/"
                                                  th:href="@{/login}">Login
                                 here</a></span>
                 </div>
@@ -146,150 +147,3 @@
 </div>
 </body>
 </html>
-
-<!--<!DOCTYPE html>-->
-<!--<html>-->
-<!--<head>-->
-<!--    <meta charset="utf-8">-->
-<!--    <title>Spring Security Demo</title>-->
-<!--    <link rel="stylesheet"-->
-<!--          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">-->
-<!--</head>-->
-
-<!--<style>-->
-<!--    .navbar {-->
-<!--        background-color: green;-->
-<!--    }-->
-<!--</style>-->
-
-<!--<body>-->
-
-<!--&lt;!&ndash; create navigation bar ( header) &ndash;&gt;-->
-<!--<nav class="navbar navbar-inverse navbar-fixed-top">-->
-<!--    <div class="container">-->
-<!--        <div class="navbar-header">-->
-<!--            <button type="button" class="navbar-toggle collapsed"-->
-<!--                    data-toggle="collapse" data-target="#navbar"-->
-<!--                    aria-expanded="false" aria-controls="navbar">-->
-<!--                <span class="sr-only">Toggle navigation</span>-->
-<!--                <span class="icon-bar"></span> <span-->
-<!--                    class="icon-bar"></span> <span class="icon-bar"></span>-->
-<!--            </button>-->
-<!--            <a class="navbar-brand" href="#" th:href="@{/}">-->
-<!--                Registration and-->
-<!--                Login </a>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</nav>-->
-
-<!--<br><br><br><br><br><br><br>-->
-<!--&lt;!&ndash; Create HTML registration form &ndash;&gt;-->
-<!--<div class="container">-->
-<!--    <div class="row">-->
-<!--        <div class="col-md-6 col-md-offset-3">-->
-
-<!--            &lt;!&ndash; success message &ndash;&gt;-->
-<!--            <div th:if="${param.success}">-->
-<!--                <div class="alert alert-info">You've successfully registered-->
-<!--                    to our awesome app!</div>-->
-<!--            </div>-->
-
-<!--            <h1>Registration</h1>-->
-
-<!--            <form th:action="@{/registration}" method="post"-->
-<!--                  th:object="${users}">-->
-<!--                <div class="form-group">-->
-<!--                    <label class="control-label" for="firstName">-->
-<!--                        First Name </label>-->
-<!--                    <input id="firstName" class="form-control" minlength="3"-->
-<!--                           th:field="*{firstName}" required-->
-<!--                           autofocus="autofocus" />-->
-<!--                </div>-->
-
-<!--                <div class="form-group">-->
-<!--                    <label class="control-label" for="lastName">-->
-<!--                        Last Name </label> <input id="lastName" minlength="3"-->
-<!--                                                  class="form-control" th:field="*{lastName}"-->
-<!--                                                  required autofocus="autofocus" />-->
-<!--                </div>-->
-
-<!--&lt;!&ndash;                <div class="form-group">&ndash;&gt;-->
-<!--&lt;!&ndash;                    <label class="control-label" for="username">&ndash;&gt;-->
-<!--&lt;!&ndash;                        User Name </label>&ndash;&gt;-->
-<!--&lt;!&ndash;                    <input id="username" class="form-control" minlength="4"&ndash;&gt;-->
-<!--&lt;!&ndash;                           th:field="*{username}" required&ndash;&gt;-->
-<!--&lt;!&ndash;                           autofocus="autofocus" />&ndash;&gt;-->
-<!--&lt;!&ndash;                </div>&ndash;&gt;-->
-
-<!--                <div class="form-group">-->
-<!--                    <label class="control-label" for="email"> Email-->
-<!--                    </label> <input id="email" class="form-control" pattern="[^@\s]+@[^@\s]+\.[^@\s]+"-->
-<!--                                    title="Invalid email address"-->
-<!--                                    th:field="*{email}" required autofocus="autofocus"-->
-<!--                />-->
-<!--                </div>-->
-
-
-<!--                <script>-->
-
-<!--                    var check = function() {-->
-<!--                        if (document.getElementById('password').value ==-->
-<!--                            document.getElementById('confirmPassword').value) {-->
-<!--                            document.getElementById('message').style.color = 'green';-->
-<!--                            document.getElementById('message').innerHTML = 'matching';-->
-<!--                            document.getElementById('submit').disabled = false;-->
-<!--                        } else {-->
-<!--                            document.getElementById('message').style.color = 'red';-->
-<!--                            document.getElementById('message').innerHTML = 'not matching';-->
-<!--                            document.getElementById('submit').disabled = true;-->
-<!--                        }-->
-
-
-<!--                    }-->
-
-<!--                </script>-->
-<!--                <div class="form-group">-->
-<!--                    <label class="control-label" for="password">-->
-<!--                        Password </label> <input id="password" minlength="5"-->
-<!--                                                 class="form-control" type="password" onkeyup='check();'-->
-<!--                                                 th:field="*{password}" required-->
-<!--                                                 autofocus="autofocus" />-->
-<!--                </div>-->
-
-<!--                <div class="form-group">-->
-<!--                    <label class="control-label" for="confirmPassword">-->
-<!--                        confirmPassword </label> <input id="confirmPassword" minlength="5"-->
-<!--                                                 class="form-control" type="password" onkeyup='check();'-->
-<!--                                                 th:field="*{confirmPassword}" required-->
-<!--                                                 autofocus="autofocus" />-->
-<!--                    <span id='message'></span>-->
-<!--                </div>-->
-
-<!--                <div class="custom-control custom-checkbox ml-2 mb-4"-->
-<!--                     th:classappend="${#fields.hasErrors('enabled')}? 'has-error':''">-->
-
-<!--                    <input type="checkbox" class="custom-control-input mr-3"-->
-<!--                           id="enabled" th:field="*{enabled}" required /> <label-->
-<!--                        class="custom-control-label" for="enabled">-->
-<!--                    <p class="font-small">-->
-<!--                        <a href="#">I agree with the terms and conditions for Registration.</a>-->
-<!--                    </p>-->
-
-<!--                </label>-->
-
-<!--                </div>-->
-
-<!--                <div class="form-group">-->
-<!--                    <button type="submit" class="btn btn-primary" id="submit">-->
-<!--                        Register</button>-->
-<!--                    <span>Already registered? <a href="/"-->
-<!--                                                 th:href="@{/login}">Login-->
-<!--                                here</a></span>-->
-<!--                </div>-->
-<!--            </form>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
-<!--</body>-->
-<!--</html>-->
-

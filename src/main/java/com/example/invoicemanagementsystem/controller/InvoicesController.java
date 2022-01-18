@@ -3,20 +3,27 @@ import com.example.invoicemanagementsystem.model.*;
 import com.example.invoicemanagementsystem.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.repository.query.Param;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.logout.CookieClearingLogoutHandler;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+import org.springframework.security.web.authentication.rememberme.AbstractRememberMeServices;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.security.Principal;
 import java.text.ParseException;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Locale;
 
 @Controller
 public class InvoicesController {
@@ -36,6 +43,10 @@ public class InvoicesController {
 	private UserService userService;
 	@Autowired
 	private FileResposeService fileResposeService;
+
+
+	Long userId;
+
 
 	@GetMapping("/addNewItem")
 	public String addNewItem(Model model){
@@ -75,14 +86,28 @@ public class InvoicesController {
 
 		return "redirect:/viewInvoice/{idInvoice}";
 	}
+
+
+
 //	@GetMapping("/addItemToInvoivce/invoiceId/{idInvoice}/itemId/{idItem}")
-	@GetMapping("/addItemToInvoivce/invoiceId/{idInvoice}/itemId/{idItem}/q/{quantity}/d/{discount}")
-	public String addItemToInvoice(@PathVariable ( value = "idInvoice") long idInvoice,@PathVariable ( value = "idItem") long idItem,@PathVariable ( value = "discount") int discount,@PathVariable ( value = "quantity") int quantity,Model model,@ModelAttribute("invoice") Invoice invoice) throws ParseException {
-		invoice=invoiceService.getInvoiceById(idInvoice);
+
+//	@GetMapping("/addItemToInvoivce/invoiceId/{idInvoice}/itemId/{idItem}/quantity/{quantity}/discount/{discount}")
+	@GetMapping("/addItemToInvoivce/invoiceId/{idInvoice}/itemId/{idItem}")
+	public String addItemToInvoice(@PathVariable ( value = "idInvoice") long idInvoice,@PathVariable ( value = "idItem") long idItem,@Param("discount1") Integer discount,@Param("quantity1") Integer quantity,Model model) throws ParseException {
+//		quantity=1;
+//		discount=0;
+
+		Invoice invoice=invoiceService.getInvoiceById(idInvoice);
 		if(invoice==null){
 			saveInvoice(invoice, model);
 			//invoice.setUser(userService.getUserById(userId));
 			//invoiceService.saveInvoice(invoice);
+		}
+		if(discount==null){
+			discount=0;
+		}
+		if(quantity==null){
+			quantity=1;
 		}
 		InvoiceItems invoiceItem=invoiceItemsService.getInvoiceItemsByItemId(idInvoice,idItem);
 		if(invoiceItem==null){
@@ -115,9 +140,8 @@ public class InvoicesController {
 
 		List<Item> items=itemService.getAllItems();
 		model.addAttribute("listItem", items);
-		return "redirect:/viewInvoice/{idInvoice}";
+		return "view_invoice1";
 	}
-
 
 	@GetMapping("/deleteItemFromInvoivce/invoiceId/{idInvoice}/InvoiceitemId/{idInvoiceitem}")
 	public String deleteItemFromInvoivce(@PathVariable ( value = "idInvoice") long idInvoice,@PathVariable ( value = "idInvoiceitem") long idInvoiceitem,Model model){
@@ -150,9 +174,7 @@ public class InvoicesController {
 		invoiceItem.setQuantity(q);
 		invoice.addItem(invoiceItem);
 
-//		//invoice.addItem(invoiceItem);
 		System.out.println(invoiceItem.toString()+"+++++++++++++++afteeeeeeeeeeeer+++++++++++++++");
-//		invoice.updateItem(invoiceItem);
 		System.out.println(invoice.toString());
 		invoiceService.saveInvoice(invoice);
 		model.addAttribute("invoice", invoice);
@@ -168,11 +190,15 @@ public class InvoicesController {
 		return "redirect:/viewInvoice/{idInvoice}";
 	}
 
-
-
 	@GetMapping("/listInvoice")
-	public String viewInvoicesPage(Model model) {
-		return findPaginated(1, "creationDate", "desc", model);
+	public String viewInvoicesPage(Model model,@Param("keyword")String keyword) {
+		model.addAttribute("invoice",new Invoice());
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String name = auth.getName();
+		User loggedUser = userService.findByUsername(name);
+		userId = loggedUser.getId();
+		System.out.println(keyword+"5555555555555555");
+		return findPaginated(1, "creationDate", "desc", model,keyword);
 	}
 
 
@@ -188,7 +214,7 @@ public class InvoicesController {
 	}
 
 	@PostMapping("/saveInvoice")
-	public void saveInvoice(@ModelAttribute("invoice") Invoice invoice,Model model) throws ParseException {
+	public String saveInvoice(@ModelAttribute("invoice") Invoice invoice,Model model) throws ParseException {
 //		System.out.println(invoice.toString());
 		invoice.setUser(userService.getUserById(userId));
 		invoiceService.saveInvoice(invoice);
@@ -206,7 +232,9 @@ public class InvoicesController {
 		InvoiceItems newInvoiceItem= new InvoiceItems();
 		model.addAttribute("newInvoiceItem",newInvoiceItem);
 
-		//return "update_invoice";
+//		return "redirect:/viewInvoice/{"+invoice.getId()+"}";
+//		return "redirect:/listInvoice";
+	return "view_invoice1";
 	}
 
 
@@ -259,67 +287,77 @@ public class InvoicesController {
 	}
 
 
-
-///////////////////////////////////////////
-	public Long userId;
-//	@Autowired
-//	private UserService userService;
-
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder=new BCryptPasswordEncoder();
 
-//	@GetMapping("/login")
-//	public String login1(Model model){
-//		model.addAttribute("customer",new User());
-//		return "login";
-//	}
 
 
-	@RequestMapping(value = "/login" ,method = RequestMethod.GET)
-	public String login(@ModelAttribute("customer") User user) {
-		System.out.println("login done ..."+" 11111 "+" logout: "+user.toString());
-		//if(principal != null) {
-//            userId=user.getId();
-	System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-		String name = auth.getName();
-		if(!name.equals("")) {
+	@GetMapping("/login")
+	public String login(@RequestParam(value = "error", required = false) String error,
+						@RequestParam(value = "logout", required = false) String logout,
+						Model model, Principal principal, RedirectAttributes flash, Locale locale) {
+		System.out.println("login done ..."+principal+error+" logout: "+logout);
+		if(principal != null) {
+			System.out.println("hiiii11111111111111111111111");
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+			String name = auth.getName();
 			System.out.println("HIIIIIIIIIIIIII " + name);
-			System.out.println(auth);
 			User loggedUser = userService.findByUsername(name);
-//			if(loggedUser==null){
-//				loggedUser=userService.findByUsername("admin");
-//			}
-			if (loggedUser != null) {
+			if(loggedUser!=null) {
 				userId = loggedUser.getId();
-				System.out.println(loggedUser + " -------------------------------------44444444444444");
-				return "redirect:/listInvoice";
+				return "redircet:/listInvoice";
 			}
+
+			return "redirect:/";
 		}
 
+		if(error != null) {
+			System.out.println("error");
+
+		}
+
+		if(logout != null) {
+			System.out.println("success");
+		}
 
 		return "login";
 	}
+	private boolean isAuthenticated() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication == null || authentication instanceof AnonymousAuthenticationToken) {
+			return false;
+		}
+		return true;
+	}
+@GetMapping("/")
+public String home(){
+		return "home";
+}
+
+//
+	@GetMapping("/logout")
+	public String logout(HttpServletRequest request, HttpServletResponse response){
+		SecurityContextHolder.clearContext();
+		userId=(long)-1;
+		return "redirect:/login?logout";
+	}
+
+
 	///////////////////////////////////////////////////
+
 	@GetMapping("/pageInvoice/{pageNo}")
 	public String findPaginated(@PathVariable (value = "pageNo") int pageNo,
 			@RequestParam("sortField") String sortField,
 			@RequestParam("sortDir") String sortDir,
-			Model model) {
+			Model model,String keyword) {
 		int pageSize = 10;
-//		User user = (User)authentication.getPrincipal();
-
-		Page<Invoice> page = invoiceService.findPaginatedInvoice(pageNo, pageSize, sortField, sortDir,userId);
-//		User user = userService.getUserById(id);
-
+		Page<Invoice> page = invoiceService.findPaginatedInvoice(pageNo, pageSize, sortField, sortDir, userId);
+		System.out.println("================ search for => "+keyword);
+		if(keyword!=null) {
+			page = invoiceService.findPaginatedInvoiceSearch(pageNo, pageSize, sortField, sortDir, userId,keyword);
+		}
 		List<Invoice> listinvoices = page.getContent();
-//		List<Invoice> listinvoices = page.getContent();
-//		for(int i=0;i<list.size();i++){
-//			if(list.get(i).getUser().equals(user)){
-//				listinvoices.add(list.get(i));
-//			}
-//		}
 		model.addAttribute("currentPage", pageNo);
 		model.addAttribute("totalPages", page.getTotalPages());
 		model.addAttribute("totalItems", page.getTotalElements());
@@ -327,8 +365,13 @@ public class InvoicesController {
 		model.addAttribute("sortField", sortField);
 		model.addAttribute("sortDir", sortDir);
 		model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+		model.addAttribute("invoice", new Invoice());
 
 		model.addAttribute("listinvoices", listinvoices);
 		return "indexInvoice";
 	}
+
+
+
+
 }

@@ -11,8 +11,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -22,7 +24,8 @@ import java.util.stream.Collectors;
 public class UserService {
 
 	@Autowired
-	private BCryptPasswordEncoder passwordEncoder=new BCryptPasswordEncoder();
+	private BCryptPasswordEncoder passwordEncoder;
+
 	@Autowired
 	private UserRepository userRepository;
 
@@ -34,6 +37,7 @@ public class UserService {
 		return userRepository.findAll();
 	}
 
+	@Transactional
 	public void saveUser(User registration) {
 		if(findByUsername(registration.getUsername())==null) {
 
@@ -43,7 +47,7 @@ public class UserService {
 			}
 			registration.setPassword(passwordEncoder.encode(registration.getPassword()));
 			List<Role> role=new ArrayList<>();
-			role.add(new Role("USER"));
+			role.add(new Role("ROLE_USER"));
 			registration.setAuthorities(role);
 			System.out.println("111111111111111111111111111"+registration.toString()+"222222222222222222");
 			userRepository.save(registration);

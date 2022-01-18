@@ -26,7 +26,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 				.and().csrf().ignoringAntMatchers("/h2-console/**")
 				.and().headers().frameOptions().sameOrigin();
 
-		http.authorizeRequests().antMatchers("/", "/css/**", "/js/**", "/images/**", "/locale", "/api/**", "/registration","/login").permitAll()
+		http.authorizeRequests().antMatchers("/", "/css/**", "/js/**", "/images/**", "/locale", "/api/**", "/registration","/home").permitAll()
 				.anyRequest().authenticated()
 				.and()
 				.formLogin().loginPage("/login").permitAll()

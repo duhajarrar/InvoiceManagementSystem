@@ -9,12 +9,20 @@
 </head>
 <body>
 	<div class="container">
+		<nav class="navbar navbar-inverse navbar-fixed-top" style="background-color: #41a4bf;">
+			<div class="container">
+				<img src="../static/img/payment.png" width="40" height="40"/>
+				<a class="navbar-brand" href="#" style="color:white;">Invoice Management System </a>
+				<a class="navbar-brand" style="margin-left: 600px;color:white;" href="#" th:href="@{/logout}">Logout </a>
+
+			</div>
+		</nav>
 		<h1>Invoice Management System</h1>
 		<hr>
-		<h2>View Invoice</h2>
-
 		<form action="#"  th:object="${invoice}">
-			
+		<h2>Invoice:</h2><h2 th:value="*{title}"></h2>
+
+
 			<!-- Add hidden form field to handle update -->
 			<input type="hidden" th:field="*{id}" />
 
@@ -40,7 +48,7 @@
 		<h2>All Uploaded Files:</h2>
 		<ul>
 			<li th:each="file : ${files}">
-				<a th:href="${file}" target="_blank" th:text="${file.uri}"></a>
+				<a th:href="${file.uri}" target="_blank" th:text="${file.uri}"></a>
 			</li>
 		</ul>
 
@@ -129,26 +137,46 @@
 					<a th:href="@{'/page/' + ${currentPage} + '?sortField=lastName&sortDir=' + ${reverseSortDir}}">
 						Price</a>
 				</th>
-				<th>
+				<th style="width: 700px">
 					<a th:href="@{'/page/' + ${currentPage} + '?sortField=firstName&sortDir=' + ${reverseSortDir}}">
-						Quantity</a>
+						Quantity & Discount</a>
 				</th>
-				<th>
-					<a th:href="@{'/page/' + ${currentPage} + '?sortField=firstName&sortDir=' + ${reverseSortDir}}">
-						Discount</a>
-				</th>
-				<th> Actions </th>
+<!--				<th>-->
+<!--					<a th:href="@{'/page/' + ${currentPage} + '?sortField=firstName&sortDir=' + ${reverseSortDir}}">-->
+<!--						Discount</a>-->
+<!--				</th>-->
+<!--				<th> Actions </th>-->
 			</tr>
 
 			</tr>
 			</thead>
 			<tbody>
+
 			<tr th:each="item : ${listItem}">
 			<td th:text="${item.name}"></td>
 			<td th:text="${item.price}"></td>
-			<td><input type="number" name="quantity" id="quantity" placeholder="quantity" value="1" class="form-control mb-4 col-4"></td>
-			<td><input type="number" name="discount" id="discount" placeholder="discount" value="0" class="form-control mb-4 col-4"></td>
-			<td><a th:href="@{/addItemToInvoivce/invoiceId/{idInvoice}/itemId/{idItem}/q/{quantity}/d/{discount}(idInvoice=${invoice.id},idItem=${item.id})}" class="btn" style="color:white;background-color: limegreen">Add item to invoice</a></td>
+				<td>
+			<form id="add" style="float:left;display: flex; flex-direction: row;flex: 50px;" th:action="@{/addItemToInvoivce/invoiceId/{idInvoice}/itemId/{idItem}(idInvoice=${invoice.id},idItem=${item.id})}">
+
+				<input type="number" style="margin-right: 5px;width: 30px" name="quantity1" id="quantity1" placeholder="quantity" th:value="${quantity1}" class="form-control mb-4 col-4">
+			    <input type="number" style="margin-right: 5px;width: 30px" name="discount1" id="discount1" placeholder="discount" th:value="${discount1}" class="form-control mb-4 col-4">
+				<input type="submit" value="Add item to invoice" style="margin-right: 5px;height: fit-content;width:550px" class="btn btn-info" />
+
+<!--				<button form="add" style="margin-right: 5px;height: fit-content;width:550px" type="submit" class="btn btn-info col-2">Add item to invoice</button>-->
+			</form></td>
+				<script>
+					var quantity = document.getElementById("quantity").value;
+					var discount = document.getElementById("discount").value;
+					var strLink ="/addItemToInvoivce/invoiceId/"+${invoice.id}+"/idItem/"+${item.id}+"/quantity/" + quantity+"/discount/"+discount;
+
+				</script>
+<!--			<td>-->
+<!--				<button form="add" type="submit">Add item to invoice</button>-->
+<!--&lt;!&ndash;				<a  th:href="@{/addItemToInvoivce/invoiceId/${invoice.id}/idItem/${item.id}/quantity/${quantity}/discount/${discount}}" class="btn" style="color:white;background-color: limegreen">Add item to invoice</a>&ndash;&gt;-->
+<!--&lt;!&ndash;				<a  th:href="@{/addItemToInvoivce/invoiceId/${invoice.id}/idItem/${item.id}}" class="btn" style="color:white;background-color: limegreen">Add item to invoice</a>&ndash;&gt;-->
+
+<!--			</td>-->
+<!--				<td><a id="link" class="btn" style="color:white;background-color: limegreen">Add item to invoice</a></td>-->
 
 				<!--				<td> <a th:href="@{/updateCustomer/{id}(id=${item.id})}" class="btn btn-primary">Update</a>-->
 				<!--					<a th:href="@{/deleteCustomer/{id}(id=${item.id})}" class="btn btn-danger">Delete</a>-->

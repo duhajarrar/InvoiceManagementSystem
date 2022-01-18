@@ -46,4 +46,15 @@ public class InvoiceService {
 		Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
 		return this.invoiceRepository.findInvoiceByUser_Id(userId,pageable);
 	}
+
+
+	public Page<Invoice> findPaginatedInvoiceSearch(int pageNo, int pageSize, String sortField, String sortDirection,long userId,String keyword) {
+		Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() :
+				Sort.by(sortField).descending();
+
+		Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
+		return this.invoiceRepository.search(keyword,userId,pageable);
+	}
+
+
 }

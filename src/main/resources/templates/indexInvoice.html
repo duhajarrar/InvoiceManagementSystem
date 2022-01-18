@@ -1,14 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/extra/spring-security"
+	  class="h-100"><head>
 <meta charset="UTF-8">
 <title>Invoices Management System</title>
 
 <link rel="stylesheet"
-	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-	integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
-	crossorigin="anonymous">
-	
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 </head>
 <style>
 	.navbar {
@@ -16,24 +14,70 @@
 	}
 </style>
 <body>
-<nav class="navbar navbar-inverse navbar-fixed-top">
+<nav class="navbar navbar-inverse navbar-fixed-top" style="background-color: #41a4bf;">
 	<div class="container">
-		<div class="row">
-			<div class="col-md-6 col-md-offset-3">
-				<a class="navbar-brand" href="#" th:href="@{/logout}" style="color:white;">Logout </a>
-			</div>
+			<img src="../static/img/payment.png" width="40" height="40"/>
+			<a class="navbar-brand" style="color:white;">Invoice Management System </a>
+			<a class="navbar-brand" style="margin-left: 700px;color:white;" href="#" th:href="@{/logout}">Logout </a>
+
 		</div>
-	</div>
 </nav>
 
+
+
+
 	<div class="container my-2">
-	<h1>Invoices List</h1>
+
+
+		<form action="#" th:action="@{/saveInvoice}" th:object="${invoice}" style="background-color: aliceblue;border-color: aliceblue;border-radius: 15px;border-style: solid;margin-bottom: 30px;width: 1070px;height: 150px"
+			  method="POST">
+			<h4 style="margin-left:50px;margin-top: 20px">Create new Invoice</h4>
+
+			<div style="float:left;display: flex; flex-direction: row;flex: 50px;padding-top: 15px;padding-left: 50px">
+			<input type="text" th:field="*{title}"
+				   placeholder="Title" class="form-control mb-4 col-4">
+
+			<input type="text" th:field="*{description}"
+				   placeholder="Description" class="form-control mb-4 col-4" style="margin-left:20px;">
+
+			<input type="date" th:field="*{creationDate}" style="margin-left:20px;"
+				   placeholder="creationDate" class="form-control mb-4 col-4">
+
+			<!--			<input type="text" name="search_product" id="search_product" placeholder='Search Item'-->
+			<!--				   class="form-control mb-4 col-4" />-->
+
+			<input type="hidden" th:field="*{total}"
+				   placeholder="total" class="form-control mb-4 col-4">
+
+			<button style="margin-left:30px;height: 40px" type="submit" class="btn btn-info" > Add Invoice</button>
+			</div>
+		</form>
+<!--		</div>-->
+<!--<div class="container my-2">-->
 
 
 
-	<a th:href = "@{/showNewInvoiceForm}" class="btn btn-primary btn-sm mb-3"> Add Invoice </a>
+<div style="background-color: aliceblue;border-color: aliceblue;border-radius: 15px;border-style: solid;margin-bottom: 30px;width: 1070px">
+
+
+	<form th:action="@{/listInvoice}" style="margin-top: 20px;margin-bottom: 20px;float:left;display: flex; flex-direction: row;flex: 50px;margin-left: 50px;">
+		<h3 style="width: 300px">Invoices List</h3>
+			<input type="text"  style="width: 70px;margin-left: 250px;margin-top: 20px" placeholder="Type invoice info" class="form-control mb-4 col-4" name="keyword" id="keyword" th:value="${keyword}" required />
+			&nbsp;
+			<input type="submit" value="Search Invoice" style="margin-left:15px;height: 40px;margin-top: 20px" class="btn btn-info" />
+			&nbsp;
+			<input type="button" value="Display all" id="btnClear"  style="margin-left:15px;margin-top: 20px;height: 40px" class="btn btn-info" onclick="clearSearch()" />
+		</form>
+		<script type="text/javascript">
+			function clearSearch() {
+				window.location = "[[@{/listInvoice}]]";
+			}
+		</script>
+
+<!--	<a th:href = "@{/showNewInvoiceForm}" class="btn btn-primary btn-sm mb-3"> Add Invoice </a>-->
 	
-		<table border="1" class = "table table-striped table-responsive-md">
+		<table border="1" class = "table table-striped table-responsive-md" style="margin-left: 50px;margin-right: 50px;width: 970px;height: 800px">
+
 			<thead>
 				<tr>
 <!--					<th>-->
@@ -41,22 +85,22 @@
 <!--							Id </a>-->
 <!--					</th>-->
 					<th>
-					<a th:href="@{'/page/' + ${currentPage} + '?sortField=title&sortDir=' + ${reverseSortDir}}">
-							title</a>
+					<a th:href="@{'/pageInvoice/' + ${currentPage} + '?sortField=title&sortDir=' + ${reverseSortDir}}">
+							Title</a>
 					</th>
 					<th>
-					<a th:href="@{'/page/' + ${currentPage} + '?sortField=description&sortDir=' + ${reverseSortDir}}">
-						description</a>
+					<a th:href="@{'/pageInvoice/' + ${currentPage} + '?sortField=description&sortDir=' + ${reverseSortDir}}">
+						Description</a>
+					</th>
+					<th style="width: 150px">
+						<a th:href="@{'/pageInvoice/' + ${currentPage} + '?sortField=creationDate&sortDir=' + ${reverseSortDir}}">
+							Creation Date</a>
 					</th>
 					<th>
-						<a th:href="@{'/page/' + ${currentPage} + '?sortField=creationDate&sortDir=' + ${reverseSortDir}}">
-							creationDate</a>
+						<a th:href="@{'/pageInvoice/' + ${currentPage} + '?sortField=total&sortDir=' + ${reverseSortDir}}">
+							Total</a>
 					</th>
-					<th>
-						<a th:href="@{'/page/' + ${currentPage} + '?sortField=total&sortDir=' + ${reverseSortDir}}">
-							total</a>
-					</th>
-					<th> Actions </th>
+					<th style="width: 250px"> Actions </th>
 				</tr>
 			</thead>
 			<tbody>
@@ -74,7 +118,7 @@
 				</tr>
 			</tbody>
 		</table>
-		
+	</div>
 		<div>
 			<div class = "row col-sm-10">
 				<div class = "col-sm-2">

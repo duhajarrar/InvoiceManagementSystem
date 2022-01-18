@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extra/spring-security"
+      class="h-100">
+<head>
+    <meta charset="UTF-8">
+    <title>Hello!</title>
+</head>
+<body>
+
+<li sec:authorize="!isAuthenticated()">
+    <a class="btn btn-primary btn-md" th:href="@{/login}"
+       >Sign In</a>
+</li>
+
+</body>
+</html>

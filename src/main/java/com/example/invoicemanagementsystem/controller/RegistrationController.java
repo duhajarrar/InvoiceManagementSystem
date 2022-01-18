@@ -15,8 +15,9 @@ import java.util.List;
 @SessionAttributes("customer")
 public class RegistrationController {
 
-  @Autowired
-  private BCryptPasswordEncoder passwordEncoder=new BCryptPasswordEncoder();
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
     private UserService userService;
@@ -35,14 +36,6 @@ public class RegistrationController {
 //    @PostMapping("/registration")
     @RequestMapping(value = "/registration" ,method = RequestMethod.POST)
     public String registerUserAccount(@ModelAttribute("customer") User registration) {
-        //			List<Role> role=new ArrayList<>();
-//			role.add(new Role("USER"));
-//			registration.setRoles(role);
-        List<Role> role=new ArrayList<>();
-        role.add(new Role("USER"));
-        registration.setAuthorities(role);
-
-        registration.setPassword(passwordEncoder.encode(registration.getPassword()));
         System.out.println(registration.toString());
         if(userService.findByUsername(registration.getUsername())==null){
             userService.saveUser(registration);

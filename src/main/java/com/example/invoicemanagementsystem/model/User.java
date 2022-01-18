@@ -21,26 +21,14 @@ public class User {
 	@Column(name = "username")
 	private String username;
 
-
 	@Column
 	private String password;
 
-//	@Transient
-//	private String confirmPassword;
-
 	private Boolean enabled;
-
-//	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//	@JoinColumn(name = "role")
-//	private String role;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "user_id")
 	private List<Role> authorities;
-
-//	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//	@JoinColumn(name = "user_id")
-//	private List<Role> Roles;
 
 	public long getId() {
 		return id;
@@ -69,14 +57,6 @@ public class User {
 		this.password = password;
 	}
 
-//	public String getConfirmPassword() {
-//		return confirmPassword;
-//	}
-//
-//	public void setConfirmPassword(String confirmPassword) {
-//		this.confirmPassword = confirmPassword;
-//	}
-
 	public Boolean getEnabled() {
 		return enabled;
 	}
@@ -84,23 +64,6 @@ public class User {
 	public void setEnabled(Boolean enabled) {
 		this.enabled = enabled;
 	}
-
-//	public List<Role> getRoles() {
-//		return Roles;
-//	}
-//
-//	public void setRoles(List<Role> roles) {
-//		Roles = roles;
-//	}
-
-//
-//	public String getRole() {
-//		return role;
-//	}
-//
-//	public void setRole(String role) {
-//		this.role = role;
-//	}
 
 	public List<Role> getAuthorities() { return authorities; }
 
