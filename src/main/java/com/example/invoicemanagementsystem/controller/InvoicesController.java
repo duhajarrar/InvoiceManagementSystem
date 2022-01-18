@@ -4,8 +4,12 @@ import com.example.invoicemanagementsystem.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.logout.CookieClearingLogoutHandler;
@@ -22,6 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.security.Principal;
 import java.text.ParseException;
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
@@ -47,7 +52,7 @@ public class InvoicesController {
 
 	Long userId;
 
-
+	@Secured({"ROLE_ADMIN","ROLE_USER"})
 	@GetMapping("/addNewItem")
 	public String addNewItem(Model model){
 		Item item=new Item();
@@ -55,6 +60,7 @@ public class InvoicesController {
 		return "new_item";
 	}
 
+	@Secured({"ROLE_ADMIN","ROLE_USER"})
 	@PostMapping("/saveItem/{idInvoice}")
 	public String saveItem(@PathVariable ( value = "idInvoice") long idInvoice,@ModelAttribute("newInvoiceItem") InvoiceItems newInvoiceItem,Model model) {
 		Item newItem=new Item();
@@ -92,8 +98,9 @@ public class InvoicesController {
 //	@GetMapping("/addItemToInvoivce/invoiceId/{idInvoice}/itemId/{idItem}")
 
 //	@GetMapping("/addItemToInvoivce/invoiceId/{idInvoice}/itemId/{idItem}/quantity/{quantity}/discount/{discount}")
+	@Secured({"ROLE_ADMIN","ROLE_USER"})
 	@GetMapping("/addItemToInvoivce/invoiceId/{idInvoice}/itemId/{idItem}")
-	public String addItemToInvoice(@PathVariable ( value = "idInvoice") long idInvoice,@PathVariable ( value = "idItem") long idItem,@Param("discount1") Integer discount,@Param("quantity1") Integer quantity,Model model) throws ParseException {
+	public String addItemToInvoice(@PathVariable ( value = "idInvoice") long idInvoice,@PathVariable ( value = "idItem") long idItem,@RequestParam("discount1") Integer discount,@RequestParam("quantity1") Integer quantity,Model model) throws ParseException {
 //		quantity=1;
 //		discount=0;
 
@@ -121,7 +128,6 @@ public class InvoicesController {
 			invoice.addItem(invoiceItem);
 			System.out.println(invoice.toString());
 			invoiceService.saveInvoice(invoice);
-
 		}else{
 			System.out.println(invoiceItem.toString()+" 8888888888888888888888888888");
 			invoiceItem.setQuantity(invoiceItem.getQuantity()+quantity);
@@ -143,6 +149,7 @@ public class InvoicesController {
 		return "view_invoice1";
 	}
 
+	@Secured({"ROLE_ADMIN","ROLE_USER"})
 	@GetMapping("/deleteItemFromInvoivce/invoiceId/{idInvoice}/InvoiceitemId/{idInvoiceitem}")
 	public String deleteItemFromInvoivce(@PathVariable ( value = "idInvoice") long idInvoice,@PathVariable ( value = "idInvoiceitem") long idInvoiceitem,Model model){
 		Invoice invoice=invoiceService.getInvoiceById(idInvoice);
@@ -163,19 +170,21 @@ public class InvoicesController {
 		model.addAttribute("newInvoiceItem",newInvoiceItem);
 		return "redirect:/viewInvoice/{idInvoice}";
 	}
-	@GetMapping("/updateItemFromInvoivce/invoiceId/{idInvoice}/idInvoiceitem/{idInvoiceitem}/q/{q}/d/{d}")
-	public String updateItemFromInvoivce(@PathVariable ( value = "idInvoice") long idInvoice,@PathVariable ( value = "idInvoiceitem") long idInvoiceitem,@PathVariable ( value = "q") int q,@PathVariable ( value = "d") int d,Model model){
-		System.out.println("+++++++++++++++++++ *********** "+q+"          "+d);
+
+	@Secured({"ROLE_ADMIN","ROLE_USER"})
+	@GetMapping("/updateItemFromInvoivce/invoiceId/{idInvoice}/InvoiceitemId/{idInvoiceitem}")
+		public String updateItemFromInvoivce(@PathVariable ( value = "idInvoice") long idInvoice,@PathVariable ( value = "idInvoiceitem") long idInvoiceitem,@RequestParam("discount2") Integer discount,@RequestParam("quantity2") Integer quantity,Model model) throws ParseException {
+		System.out.println("+++++++++++++++++++ *********** "+quantity+"          "+discount);
 		Invoice invoice=invoiceService.getInvoiceById(idInvoice);
 		InvoiceItems invoiceItem=invoiceItemsService.getInvoiceItemsById(idInvoiceitem);
 		System.out.println(invoiceItem.toString()+"+++++++++++++++beforrrrrrrrrrrrre+++++++++++++++");
-		invoice.deleteItem(invoiceItem);
-		invoiceItem.setDiscount(d);
-		invoiceItem.setQuantity(q);
-		invoice.addItem(invoiceItem);
-
+		//invoice.deleteItem(invoiceItem);
+		invoiceItem.setDiscount(discount);
+		invoiceItem.setQuantity(quantity);
+		//invoice.addItem(invoiceItem);
 		System.out.println(invoiceItem.toString()+"+++++++++++++++afteeeeeeeeeeeer+++++++++++++++");
-		System.out.println(invoice.toString());
+		invoiceItemsService.saveItem(invoiceItem);
+		System.out.println(invoice.getItems().toString());
 		invoiceService.saveInvoice(invoice);
 		model.addAttribute("invoice", invoice);
 
@@ -187,7 +196,7 @@ public class InvoicesController {
 
 		InvoiceItems newInvoiceItem= new InvoiceItems();
 		model.addAttribute("newInvoiceItem",newInvoiceItem);
-		return "redirect:/viewInvoice/{idInvoice}";
+		return "redirect:/showFormForUpdateInvoice/{idInvoice}";
 	}
 
 	@GetMapping("/listInvoice")
@@ -201,7 +210,7 @@ public class InvoicesController {
 		return findPaginated(1, "creationDate", "desc", model,keyword);
 	}
 
-
+	@Secured({"ROLE_ADMIN","ROLE_USER"})
 	@GetMapping("/showNewInvoiceForm")
 	public String showNewInvoiceForm(Model model) {
 		Invoice invoice = new Invoice();
@@ -213,6 +222,7 @@ public class InvoicesController {
 		return "new_invoice";
 	}
 
+	@Secured({"ROLE_ADMIN","ROLE_USER"})
 	@PostMapping("/saveInvoice")
 	public String saveInvoice(@ModelAttribute("invoice") Invoice invoice,Model model) throws ParseException {
 //		System.out.println(invoice.toString());
@@ -238,6 +248,7 @@ public class InvoicesController {
 	}
 
 
+	@Secured({"ROLE_ADMIN","ROLE_USER"})
 	@GetMapping("/showFormForUpdateInvoice/{id}")
 	public String showFormForUpdateInvoice(@PathVariable ( value = "id") long id, Model model) {
 		Invoice invoice = invoiceService.getInvoiceById(id);
@@ -259,8 +270,41 @@ public class InvoicesController {
 		return "update_invoice";
 	}
 
+
+	@GetMapping("/viewFiles/{id}")
+	public String viewFilesFiles(@PathVariable ( value = "id") long id, Model model) {
+		List<FileResponse> files=fileResposeService.getFileByInvoiceId(id);
+//		model.addAttribute("files",files);
+		//return "indexFiles";
+		return findPaginatedFile(1, "id", "asc", model,id);
+
+	}
+
+	@GetMapping("/pageFile/{pageNo}")
+	public String findPaginatedFile(@PathVariable (value = "pageNo") int pageNo,
+								@RequestParam("sortField") String sortField,
+								@RequestParam("sortDir") String sortDir,
+								Model model,Long id) {
+		int pageSize = 10;
+
+		Page<FileResponse> page = fileResposeService.findPaginated(pageNo, pageSize, sortField, sortDir,id);
+		List<FileResponse> listFiles = page.getContent();
+
+		model.addAttribute("currentPage", pageNo);
+		model.addAttribute("totalPages", page.getTotalPages());
+		model.addAttribute("totalItems", page.getTotalElements());
+
+		model.addAttribute("sortField", sortField);
+		model.addAttribute("sortDir", sortDir);
+		model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+		model.addAttribute("id",id);
+		model.addAttribute("files", listFiles);
+		return "indexFiles";
+	}
+
+
 	@GetMapping("/viewInvoice/{id}")
-	public String viewInvoice(@PathVariable ( value = "id") long id, Model model, Authentication authentication) {
+	public String viewInvoice(@PathVariable ( value = "id") long id, Model model) {
 		List<FileResponse> files=fileResposeService.getFileByInvoiceId(id);
 		model.addAttribute("files",files);
 
@@ -278,6 +322,7 @@ public class InvoicesController {
 		return "view_invoice";
 	}
 
+	@Secured({"ROLE_ADMIN","ROLE_USER"})
 	@GetMapping("/deleteInvoice/{id}")
 	public String deleteInvoice(@PathVariable (value = "id") long id) {
 
@@ -344,7 +389,6 @@ public String home(){
 	}
 
 
-	///////////////////////////////////////////////////
 
 	@GetMapping("/pageInvoice/{pageNo}")
 	public String findPaginated(@PathVariable (value = "pageNo") int pageNo,
@@ -370,7 +414,6 @@ public String home(){
 		model.addAttribute("listinvoices", listinvoices);
 		return "indexInvoice";
 	}
-
 
 
 

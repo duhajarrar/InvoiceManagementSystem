@@ -1,12 +1,17 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-	  xmlns:sec="http://www.thymeleaf.org/extra/spring-security"
-	  class="h-100"><head>
+<html lang="en"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" class="h-100"><head>
+<!--	  xmlns:sec="http://www.thymeleaf.org/extra/spring-security"-->
+
+
 <meta charset="UTF-8">
 <title>Invoices Management System</title>
 
 <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 </head>
 <style>
 	.navbar {
@@ -28,8 +33,8 @@
 
 	<div class="container my-2">
 
-
-		<form action="#" th:action="@{/saveInvoice}" th:object="${invoice}" style="background-color: aliceblue;border-color: aliceblue;border-radius: 15px;border-style: solid;margin-bottom: 30px;width: 1070px;height: 150px"
+<div sec:authorize="hasRole('ROLE_ADMIN')">
+		<form  action="#" th:action="@{/saveInvoice}" th:object="${invoice}" style="background-color: aliceblue;border-color: aliceblue;border-radius: 15px;border-style: solid;margin-bottom: 30px;width: 1070px;height: 150px"
 			  method="POST">
 			<h4 style="margin-left:50px;margin-top: 20px">Create new Invoice</h4>
 
@@ -55,7 +60,7 @@
 <!--		</div>-->
 <!--<div class="container my-2">-->
 
-
+</div>
 
 <div style="background-color: aliceblue;border-color: aliceblue;border-radius: 15px;border-style: solid;margin-bottom: 30px;width: 1070px">
 
@@ -100,7 +105,7 @@
 						<a th:href="@{'/pageInvoice/' + ${currentPage} + '?sortField=total&sortDir=' + ${reverseSortDir}}">
 							Total</a>
 					</th>
-					<th style="width: 250px"> Actions </th>
+					<th style="width: 300px"> Actions </th>
 				</tr>
 			</thead>
 			<tbody>
@@ -111,8 +116,9 @@
 					<td th:text="${invoice.creationDate}"></td>
 					<td th:text="${invoice.total}"></td>
 					<td> <a th:href="@{/showFormForUpdateInvoice/{id}(id=${invoice.id})}" class="btn btn-primary">Update</a>
-					    <a th:href="@{/deleteInvoice/{id}(id=${invoice.id})}" class="btn btn-danger">Delete</a>
+					    <a th:href="@{/deleteInvoice/{id}(id=${invoice.id})}" class="btn btn-danger fa fa-trash-o" style="color: white;font-size:24px"></a>
 						<a th:href="@{/viewInvoice/{id}(id=${invoice.id})}" class="btn" style="color:white;background-color: limegreen">View</a>
+						<a th:href="@{/viewFiles/{id}(id=${invoice.id})}"class="btn fa fa-paperclip" style="font-size:24px;color:white;background-color: darkblue"></a>
 
 					</td>
 				</tr>

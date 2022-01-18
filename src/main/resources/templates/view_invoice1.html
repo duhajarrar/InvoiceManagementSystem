@@ -22,9 +22,7 @@
 		<form action="#"  th:object="${invoice}">
 		<h2>Invoice:</h2><h2 th:value="*{title}"></h2>
 
-
-			<!-- Add hidden form field to handle update -->
-			<input type="hidden" th:field="*{id}" />
+		<input type="hidden" th:field="*{id}" />
 
 		<input type="text" th:field="*{title}" class="form-control mb-4 col-4"  disabled='disabled'>
 
@@ -33,10 +31,9 @@
 		<input type="date" th:field="*{creationDate}" class="form-control mb-4 col-4"  disabled='disabled'>
 
 		<input type="number" th:field="*{total}" class="form-control mb-4 col-4"  disabled='disabled'>
-<!--			<button type="submit" class="btn btn-info col-2"> Update Invoice</button>-->
 		</form>
 
-		<h4>Upload Multiple Files:</h4>
+		<h4>Upload Files:</h4>
 		<form method="POST" enctype="multipart/form-data" th:action="@{/upload-multiple-files/id/{idInvoice}(idInvoice=${invoice.id})}">
 			<input type="file" name="files" multiple> <br/><br/>
 			<button class="btn" style="color:white;background-color: limegreen" type="submit">Add attachment to invoice</button>
@@ -83,32 +80,26 @@
 						Price After Discount</a>
 				</th>
 
-				<th> Actions </th>
+				<th>Delete </th>
+				<th>Update</th>
 			</tr>
 			</thead>
 			<tbody>
 			<tr th:each="invoiceitem : ${invoiceItemList}">
+				<form id="update" style="float:left;display: flex; flex-direction: row;flex: 50px;" th:action="@{/updateItemFromInvoivce/invoiceId/{idInvoice}/InvoiceitemId/{idInvoiceitem}(idInvoice=${invoice.id},idInvoiceitem=${invoiceitem.id})}"></form>
 				<td th:text="${invoiceitem.item.name}"></td>
 				<td th:text="${invoiceitem.item.price}"></td>
-				<td><input type="number" name="quantity" th:value="${invoiceitem.quantity}" placeholder="quantity" class="form-control mb-4 col-4" th:contenteditable="true"></td>
-				<td><input type="number" name="discount" th:value="${invoiceitem.discount}" placeholder="discount" class="form-control mb-4 col-4" th:contenteditable="true"></td>
-
-<!--				<td th:text="${invoiceitem.quantity}" contenteditable></td>-->
-<!--				<td th:text="${invoiceitem.discount}" contenteditable></td>-->
+				<td><input type="number" form="update" th:value="${invoiceitem.quantity}" style="margin-right: 5px" name="quantity2" id="quantity2" placeholder="quantity" class="form-control mb-4 col-4"></td>
+				<td><input type="number" form="update" th:value="${invoiceitem.discount}" style="margin-right: 5px" name="discount2" id="discount2" placeholder="discount" class="form-control mb-4 col-4"></td>
 				<td th:text="${invoiceitem.priceafterdiscount}"></td>
-
 
 				<!--				<td th:text="${invoiceItem.total}"></td>-->
 				<td>
-<!--					<a th:href="@{/showFormForUpdateInvoice/{id}(id=${invoice.id})}" class="btn btn-primary">Update</a>-->
 					<a th:href="@{/deleteItemFromInvoivce/invoiceId/{idInvoice}/InvoiceitemId/{idInvoiceitem}(idInvoice=${invoice.id},idInvoiceitem=${invoiceitem.id})}" class="btn btn-danger">
 						Delete</a>
-					<a th:href="@{/updateItemFromInvoivce/invoiceId/{idInvoice}/idInvoiceitem/{idInvoiceitem}/q/{q}/d/{d}(idInvoice=${invoice.id},idInvoiceitem=${invoiceitem.id},q=${invoiceitem.quantity},d=${invoiceitem.discount})}" class="btn btn-info">
-						Update</a>
+				</td><td>
+					<input type="submit" form="update" value="Update" style="margin-right: 5px;height: fit-content" class="btn btn-info" />
 				</td>
-				<!--					<a th:href="@{/viewInvoice/{id}(id=${invoice.id})}" class="btn" style="color:white;background-color: limegreen">View</a>-->
-
-
 			</tr>
 			</tbody>
 		</table>
@@ -139,49 +130,26 @@
 				</th>
 				<th style="width: 700px">
 					<a th:href="@{'/page/' + ${currentPage} + '?sortField=firstName&sortDir=' + ${reverseSortDir}}">
-						Quantity & Discount</a>
+						Quantity</a>
 				</th>
-<!--				<th>-->
-<!--					<a th:href="@{'/page/' + ${currentPage} + '?sortField=firstName&sortDir=' + ${reverseSortDir}}">-->
-<!--						Discount</a>-->
-<!--				</th>-->
-<!--				<th> Actions </th>-->
+				<th>
+					<a th:href="@{'/page/' + ${currentPage} + '?sortField=firstName&sortDir=' + ${reverseSortDir}}">
+						Discount</a>
+				</th>
+				<th> Actions </th>
 			</tr>
 
-			</tr>
 			</thead>
 			<tbody>
 
 			<tr th:each="item : ${listItem}">
-			<td th:text="${item.name}"></td>
-			<td th:text="${item.price}"></td>
-				<td>
-			<form id="add" style="float:left;display: flex; flex-direction: row;flex: 50px;" th:action="@{/addItemToInvoivce/invoiceId/{idInvoice}/itemId/{idItem}(idInvoice=${invoice.id},idItem=${item.id})}">
-
-				<input type="number" style="margin-right: 5px;width: 30px" name="quantity1" id="quantity1" placeholder="quantity" th:value="${quantity1}" class="form-control mb-4 col-4">
-			    <input type="number" style="margin-right: 5px;width: 30px" name="discount1" id="discount1" placeholder="discount" th:value="${discount1}" class="form-control mb-4 col-4">
-				<input type="submit" value="Add item to invoice" style="margin-right: 5px;height: fit-content;width:550px" class="btn btn-info" />
-
-<!--				<button form="add" style="margin-right: 5px;height: fit-content;width:550px" type="submit" class="btn btn-info col-2">Add item to invoice</button>-->
-			</form></td>
-				<script>
-					var quantity = document.getElementById("quantity").value;
-					var discount = document.getElementById("discount").value;
-					var strLink ="/addItemToInvoivce/invoiceId/"+${invoice.id}+"/idItem/"+${item.id}+"/quantity/" + quantity+"/discount/"+discount;
-
-				</script>
-<!--			<td>-->
-<!--				<button form="add" type="submit">Add item to invoice</button>-->
-<!--&lt;!&ndash;				<a  th:href="@{/addItemToInvoivce/invoiceId/${invoice.id}/idItem/${item.id}/quantity/${quantity}/discount/${discount}}" class="btn" style="color:white;background-color: limegreen">Add item to invoice</a>&ndash;&gt;-->
-<!--&lt;!&ndash;				<a  th:href="@{/addItemToInvoivce/invoiceId/${invoice.id}/idItem/${item.id}}" class="btn" style="color:white;background-color: limegreen">Add item to invoice</a>&ndash;&gt;-->
-
-<!--			</td>-->
-<!--				<td><a id="link" class="btn" style="color:white;background-color: limegreen">Add item to invoice</a></td>-->
-
-				<!--				<td> <a th:href="@{/updateCustomer/{id}(id=${item.id})}" class="btn btn-primary">Update</a>-->
-				<!--					<a th:href="@{/deleteCustomer/{id}(id=${item.id})}" class="btn btn-danger">Delete</a>-->
+				<form id="add" style="float:left;display: flex; flex-direction: row;flex: 50px;" th:action="@{/addItemToInvoivce/invoiceId/{idInvoice}/itemId/{idItem}(idInvoice=${invoice.id},idItem=${item.id})}"></form>
+				<td th:text="${item.name}"></td>
+			    <td th:text="${item.price}"></td>
+				<td><input type="number" form="add" style="margin-right: 5px" name="quantity1" id="quantity1" placeholder="quantity" th:value="${quantity1}" class="form-control mb-4 col-4"></td>
+			    <td><input type="number" form="add" style="margin-right: 5px" name="discount1" id="discount1" placeholder="discount" th:value="${discount1}" class="form-control mb-4 col-4"></td>
+				<td><input type="submit" form="add" value="Add item to invoice" style="margin-right: 5px;height: fit-content;width:250px" class="btn btn-info" /></td>
 			</tr>
-
 			</tbody>
 		</table>
 	</div>

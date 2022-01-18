@@ -18,6 +18,7 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Long>{
     Page<Invoice> findInvoiceByUser_Id(Long userId, Pageable pageable);
     Page<Invoice> findInvoiceByUser_IdAndAndTitle(Long userId,String title, Pageable pageable);
 
-    @Query("SELECT i FROM Invoice i WHERE CONCAT(i.title, i.description) LIKE %?1% and i.user.id = ?2")
-    public Page<Invoice> search(String keyword,Long userId, Pageable pageable);
+//    @Query("SELECT i FROM Invoice i WHERE i.user.id = ?2 and CONCAT(i.title, i.description) LIKE %?1% ")
+@Query("SELECT i FROM Invoice i WHERE i.user.id = ?2 and CONCAT(i.title, i.description, i.total) LIKE %?1% or i.id in (SELECT f.invoice.id FROM FileResponse f WHERE CONCAT( f.name, f.size, f.type) LIKE %?1%) ")
+public Page<Invoice> search(String keyword,Long userId, Pageable pageable);
 }

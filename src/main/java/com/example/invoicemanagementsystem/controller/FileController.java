@@ -84,7 +84,7 @@ public class FileController {
         Arrays.stream(files)
                 .map(file -> uploadFile(file,idInvoice))
                 .collect(Collectors.toList());
-        return "redirect:/viewInvoice/{idInvoice}";
+        return "redirect:/viewFiles/{idInvoice}";
 
     }
 
