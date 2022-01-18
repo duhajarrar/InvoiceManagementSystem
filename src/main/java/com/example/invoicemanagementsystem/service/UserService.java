@@ -1,5 +1,6 @@
 package com.example.invoicemanagementsystem.service;
 
+import com.example.invoicemanagementsystem.model.Invoice;
 import com.example.invoicemanagementsystem.model.Role;
 import com.example.invoicemanagementsystem.model.User;
 import com.example.invoicemanagementsystem.repository.UserRepository;
@@ -59,14 +60,12 @@ public class UserService {
 
 
 	public User getUserById(long id) {
-		Optional<User> optional = userRepository.findById(id);
-		User user = null;
-		if (optional.isPresent()) {
-			user = optional.get();
+		User user = userRepository.findById(id);
+		if (user!=null) {
+			return user;
 		} else {
-			throw new RuntimeException(" User not found for id :: " + id);
+			throw new RuntimeException(" Invoice not found for id :: " + id);
 		}
-		return user;
 	}
 
 	public void deleteUserById(long id) {

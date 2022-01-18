@@ -207,7 +207,7 @@ public class InvoicesController {
 		User loggedUser = userService.findByUsername(name);
 		userId = loggedUser.getId();
 		System.out.println(keyword+"5555555555555555");
-		return findPaginated(1, "creationDate", "desc", model,keyword);
+			return findPaginated(1, "creationDate", "desc", model,keyword);
 	}
 
 	@Secured({"ROLE_ADMIN","ROLE_USER"})
@@ -396,6 +396,7 @@ public String home(){
 			@RequestParam("sortDir") String sortDir,
 			Model model,String keyword) {
 		int pageSize = 10;
+
 		Page<Invoice> page = invoiceService.findPaginatedInvoice(pageNo, pageSize, sortField, sortDir, userId);
 		System.out.println("================ search for => "+keyword);
 		if(keyword!=null) {

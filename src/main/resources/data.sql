@@ -4,8 +4,8 @@ INSERT INTO users(id,username,first_name,last_name,enabled,password) VALUES (2,'
 
 INSERT INTO authorities (id,user_id, authority) VALUES (1,1, 'ROLE_USER');
 INSERT INTO authorities (id,user_id, authority) VALUES (2,0, 'ROLE_ADMIN');
-INSERT INTO authorities (id,user_id, authority) VALUES (3,0, 'ROLE_USER');
-INSERT INTO authorities (id,user_id, authority) VALUES (4,2, 'ROLE_USER');
+-- INSERT INTO authorities (id,user_id, authority) VALUES (3,0, 'ROLE_USER');
+INSERT INTO authorities (id,user_id, authority) VALUES (4,2, 'ROLE_AUDIOTR');
 
 INSERT INTO Item (id,name,price) VALUES (1,'test1',10);
 INSERT INTO Item (id,name,price) VALUES (2,'test2',20);
