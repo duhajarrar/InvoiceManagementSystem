@@ -8,46 +8,68 @@
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 </head>
 <body>
+<nav class="navbar navbar-inverse navbar-fixed-top" style="background-color: #41a4bf;">
 	<div class="container">
-		<h1>Invoice Management System</h1>
-		<hr>
+		<img src="../static/img/payment.png" width="40" height="40"/>
+		<a class="navbar-brand" style="color:white;">Invoice Management System </a>
+		<a class="navbar-brand" style="margin-left: 700px;color:white;" href="#" th:href="@{/logout}">Logout </a>
+
+	</div>
+</nav>
+	<div class="container">
+
+<!--		<h1>Invoice Management System</h1>-->
+
 		<h2>View Invoice</h2>
-		<div style="display: inline-block;">
-<div >
-		<form action="#"  th:object="${invoice}">
-			
+		<hr>
+		<div style="">
+
+		<form action="#"  th:object="${invoice}" style="background-color: aliceblue;border-color: aliceblue;border-radius: 15px;border-style: solid;margin-bottom: 30px;width: 1070px;height: 150px">
+			<div style="float:left;display: flex; flex-direction: column;flex: 50px;padding-top: 5px;padding-left: 10px;">
 			<!-- Add hidden form field to handle update -->
-			<input type="hidden" th:field="*{id}" />
+			<div style="float:left;display: flex; flex-direction: row;flex: 50px;padding-top: 10px;padding-left: 10px;">
+				<input type="hidden" th:field="*{id}" />
 
-		<input type="text" th:field="*{title}" class="form-control mb-4 col-4"  disabled='disabled'>
+				<div style="float:left;display: flex; flex-direction: column;flex: 50px;padding-top: 10px;;">
 
-		<input type="text" th:field="*{description}" class="form-control mb-4 col-4"  disabled='disabled'>
+				<label style="margin-right: 15px">Title</label>
+				<input type="text" th:field="*{title}"   disabled='disabled' style="width: 350px;margin-right: 15px">
+				</div>
 
-		<input type="date" th:field="*{creationDate}" class="form-control mb-4 col-4"  disabled='disabled'>
+				<div style="float:left;display: flex; flex-direction: column;flex: 50px;padding-top: 10px;padding-left: 10px;">
 
-		<input type="number" th:field="*{total}" class="form-control mb-4 col-4"  disabled='disabled'>
-<!--			<button type="submit" class="btn btn-info col-2"> Update Invoice</button>-->
+				<label style="margin-right: 15px">Description</label>
+					<input type="text" th:field="*{description}"  disabled='disabled'style="margin-right: 15px">
+				</div>
+
+				<div style="float:left;display: flex; flex-direction: column;flex: 50px;padding-top: 10px;padding-left: 10px;">
+
+				<label  style="margin-right: 15px">Creation Date</label>
+				<input type="date" th:field="*{creationDate}"disabled='disabled'style="margin-right: 15px">
+				</div>
+
+				<div style="float:left;display: flex; flex-direction: column;flex: 50px;padding-top: 10px;padding-left: 10px;">
+
+				<label  style="margin-right: 15px">Total</label>
+					<input type="number" th:field="*{total}" disabled='disabled'style="margin-right: 15px">
+				</div>
+					<!--			<button type="submit" class="btn btn-info col-2"> Update Invoice</button>-->
+				</div>
+				<a style="padding-left: 10px;padding-top: 15px" th:href = "@{/listInvoice}"> Back to Invoice List</a>
+			</div>
+
+
 		</form>
+
+
+
+
 </div>
 
 
-		<div style="">
-		<h2>All Uploaded Files:</h2>
-		<ul>
-				<div  th:if="!${#lists.isEmpty(files)}">
-				<li th:each="file : ${files}">
-					<a th:href="${file.uri}" target="_blank" th:text="${file.uri}"></a>
-				</li>
-			</div>
-			<div th:if="${#lists.isEmpty(files)}">
-				This invoice doesn't have any files.
-			</div>
-		</ul>
-		</div>
+
 	</div>
-		<hr>
-		
-		<a th:href = "@{/listInvoice}"> Back to Invoice List</a>
+
 	</div>
 	<div class="container my-2">
 		<hr>
@@ -76,8 +98,8 @@
 						Price After Discount</a>
 				</th>
 
-				<th>Delete </th>
-				<th>Update</th>
+<!--				<th>Delete </th>-->
+<!--				<th>Update</th>-->
 			</tr>
 			</thead>
 			<tbody>
@@ -85,18 +107,20 @@
 				<form id="update" style="float:left;display: flex; flex-direction: row;flex: 50px;" th:action="@{/updateItemFromInvoivce/invoiceId/{idInvoice}/InvoiceitemId/{idInvoiceitem}(idInvoice=${invoice.id},idInvoiceitem=${invoiceitem.id})}"></form>
 				<td th:text="${invoiceitem.item.name}"></td>
 				<td th:text="${invoiceitem.item.price}"></td>
-				<td><input type="number" form="update" th:value="${invoiceitem.quantity}" style="margin-right: 5px" name="quantity2" id="quantity2" placeholder="quantity" class="form-control mb-4 col-4"></td>
-				<td><input type="number" form="update" th:value="${invoiceitem.discount}" style="margin-right: 5px" name="discount2" id="discount2" placeholder="discount" class="form-control mb-4 col-4"></td>
+<!--				<td><input type="number" form="update" th:value="${invoiceitem.quantity}" style="margin-right: 5px" name="quantity2" id="quantity2" placeholder="quantity" class="form-control mb-4 col-4"></td>-->
+<!--				<td><input type="number" form="update" th:value="${invoiceitem.discount}" style="margin-right: 5px" name="discount2" id="discount2" placeholder="discount" class="form-control mb-4 col-4"></td>-->
+				<td th:text="${invoiceitem.quantity}"></td>
+				<td th:text="${invoiceitem.discount}"></td>
 				<td th:text="${invoiceitem.priceafterdiscount}"></td>
 
 				<!--				<td th:text="${invoiceItem.total}"></td>-->
-				<td>
-					<a th:href="@{/deleteItemFromInvoivce/invoiceId/{idInvoice}/InvoiceitemId/{idInvoiceitem}(idInvoice=${invoice.id},idInvoiceitem=${invoiceitem.id})}" class="btn btn-danger">
-						Delete</a>
-				</td>
-				<td>
-					<input type="submit" form="update" value="Update" style="margin-right: 5px;height: fit-content;" class="btn btn-info" />
-				</td>
+<!--				<td>-->
+<!--					<a th:href="@{/deleteItemFromInvoivce/invoiceId/{idInvoice}/InvoiceitemId/{idInvoiceitem}(idInvoice=${invoice.id},idInvoiceitem=${invoiceitem.id})}" class="btn btn-danger">-->
+<!--						Delete</a>-->
+<!--				</td>-->
+<!--				<td>-->
+<!--					<input type="submit" form="update" value="Update" style="margin-right: 5px;height: fit-content;" class="btn btn-info" />-->
+<!--				</td>-->
 			</tr>
 			</tbody>
 		</table>

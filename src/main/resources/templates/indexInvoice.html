@@ -21,7 +21,7 @@
 <body>
 <nav class="navbar navbar-inverse navbar-fixed-top" style="background-color: #41a4bf;">
 	<div class="container">
-			<img src="../static/img/payment.png" width="40" height="40"/>
+			<img th:src="@{../static/img/payment.png}" width="40" height="40"/>
 			<a class="navbar-brand" style="color:white;">Invoice Management System </a>
 			<a class="navbar-brand" style="margin-left: 700px;color:white;" href="#" th:href="@{/logout}">Logout </a>
 
@@ -32,8 +32,8 @@
 
 
 	<div class="container my-2">
-
-<div sec:authorize="hasRole('ROLE_ADMIN')">
+<!--<h3 style="margin-left: 50px" th:value="${name}"></h3>-->
+<div th:if="${isAdmin}">
 		<form  action="#" th:action="@{/saveInvoice}" th:object="${invoice}" style="background-color: aliceblue;border-color: aliceblue;border-radius: 15px;border-style: solid;margin-bottom: 30px;width: 1070px;height: 150px"
 			  method="POST">
 			<h4 style="margin-left:50px;margin-top: 20px">Create new Invoice</h4>

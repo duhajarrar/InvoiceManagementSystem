@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 @Configuration
@@ -18,6 +19,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
+
 
 	// Method for http authorization
 	@Override

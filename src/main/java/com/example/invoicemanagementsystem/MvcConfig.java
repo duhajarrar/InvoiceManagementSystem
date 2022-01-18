@@ -6,6 +6,7 @@ import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
@@ -15,6 +16,14 @@ import java.util.Locale;
 
 @Configuration
 public class MvcConfig implements WebMvcConfigurer {
+
+
+
+	@Override
+	public void addResourceHandlers(ResourceHandlerRegistry registry){
+		registry.addResourceHandler("/**")
+				.addResourceLocations("classpath:/static/");
+	}
 
 	// Method for register view controller
 	public void addViewControllers(ViewControllerRegistry registry) {

@@ -12,58 +12,105 @@
 	<div class="container">
 		<nav class="navbar navbar-inverse navbar-fixed-top" style="background-color: #41a4bf;">
 			<div class="container">
-				<img src="../static/img/payment.png" width="40" height="40"/>
+				<img th:src="@{/InvoiceManagementSystem/static/img/payment.png}" width="40" height="40"/>
 				<a class="navbar-brand" href="#" style="color:white;">Invoice Management System </a>
 				<a class="navbar-brand" style="margin-left: 550px;color:white;" href="#" th:href="@{/logout}">Logout </a>
 
 			</div>
 		</nav>
 
-		<h1>Invoice Management System</h1>
-		<hr>
+	<br>
 		<h2>Update Invoice</h2>
+<hr>
+
 
 		<form action="#" th:action="@{/saveInvoice}" th:object="${invoice}"
-			method="POST">
-			
-			<!-- Add hidden form field to handle update -->
-			<input type="hidden" th:field="*{id}" />
+			  method="POST" style="background-color: aliceblue;border-color: aliceblue;border-radius: 15px;border-style: solid;margin-bottom: 30px;width: 1070px;height: 180px">
+			<div style="float:left;display: flex; flex-direction: column;flex: 50px;padding-top: 5px;padding-left: 10px;">
+				<!-- Add hidden form field to handle update -->
+				<div style="float:left;display: flex; flex-direction: row;flex: 50px;padding-top: 10px;padding-left: 10px;">
+					<input type="hidden" th:field="*{id}" />
 
-		<input type="text" th:field="*{title}" class="form-control mb-4 col-4">
+					<div style="float:left;display: flex; flex-direction: column;flex: 50px;padding-top: 10px;;">
 
-		<input type="text" th:field="*{description}" class="form-control mb-4 col-4">
+						<label style="margin-right: 15px">Title</label>
+						<input type="text" th:field="*{title}"   style="width: 350px;margin-right: 15px">
+					</div>
 
-		<input type="date" th:field="*{creationDate}" class="form-control mb-4 col-4">
+					<div style="float:left;display: flex; flex-direction: column;flex: 50px;padding-top: 10px;padding-left: 10px;">
 
-		<input type="text" th:field="*{total}" class="form-control mb-4 col-4">
-			<button type="submit" class="btn btn-info col-2"> Update Invoice</button>
+						<label style="margin-right: 15px">Description</label>
+						<input type="text" th:field="*{description}" style="margin-right: 15px">
+					</div>
+
+					<div style="float:left;display: flex; flex-direction: column;flex: 50px;padding-top: 10px;padding-left: 10px;">
+
+						<label  style="margin-right: 15px">Creation Date</label>
+						<input type="date" th:field="*{creationDate}" style="margin-right: 15px">
+					</div>
+
+					<div style="float:left;display: flex; flex-direction: column;flex: 50px;padding-top: 10px;padding-left: 10px;">
+
+						<label  style="margin-right: 15px">Total</label>
+						<input type="number" th:field="*{total}"  disabled='disabled' style="margin-right: 15px">
+					</div>
+					<!--			<button type="submit" class="btn btn-info col-2"> Update Invoice</button>-->
+
+				</div>
+				<div style="float:left;display: flex; flex-direction: column;flex: 50px;padding-top: 10px;padding-left: 10px;">
+
+<!--				<a style="padding-left: 10px;padding-top: 15px" th:href = "@{/listInvoice}"> Back to Invoice List</a>-->
+				<button type="submit" class="btn" style="margin-left: 780px;height: 45px;color:white;background-color: #41a4bf"> Update Invoice</button>
+				</div>
+				</div>
+
+
 		</form>
-		<hr>
+
+
+
+<!--		<form action="#" th:action="@{/saveInvoice}" th:object="${invoice}"-->
+<!--			method="POST">-->
+<!--			-->
+<!--			&lt;!&ndash; Add hidden form field to handle update &ndash;&gt;-->
+<!--			<input type="hidden" th:field="*{id}" />-->
+
+<!--		<input type="text" th:field="*{title}" class="form-control mb-4 col-4">-->
+
+<!--		<input type="text" th:field="*{description}" class="form-control mb-4 col-4">-->
+
+<!--		<input type="date" th:field="*{creationDate}" class="form-control mb-4 col-4">-->
+
+<!--		<input type="text" th:field="*{total}" class="form-control mb-4 col-4">-->
+<!--			<button type="submit" class="btn btn-info col-2"> Update Invoice</button>-->
+<!--		</form>-->
+
 		
 		<a th:href = "@{/listInvoice}"> Back to Invoice List</a>
-	<hr>
-	<h4>Upload Multiple Files:</h4>
-	<form method="POST" enctype="multipart/form-data" th:action="@{/upload-multiple-files/id/{idInvoice}(idInvoice=${invoice.id})}">
-		<input type="file" name="files" multiple> <br/><br/>
-		<button class="btn" style="color:white;background-color: limegreen" type="submit">Add attachment to invoice</button>
-		<!--			<a th:href="@{/upload-multiple-files/id/{idInvoice}(idInvoice=${invoice.id})}" class="btn" style="color:white;background-color: limegreen">Add attachment to invoice</a>-->
 
-	</form>
+<!--	<h4>Upload Multiple Files:</h4>-->
+<!--	<form method="POST" enctype="multipart/form-data" th:action="@{/upload-multiple-files/id/{idInvoice}(idInvoice=${invoice.id})}">-->
+<!--		<input type="file" name="files" multiple> <br/><br/>-->
+<!--		<button class="btn" style="color:white;background-color: limegreen" type="submit">Add attachment to invoice</button>-->
+<!--		&lt;!&ndash;			<a th:href="@{/upload-multiple-files/id/{idInvoice}(idInvoice=${invoice.id})}" class="btn" style="color:white;background-color: limegreen">Add attachment to invoice</a>&ndash;&gt;-->
+
+<!--	</form>-->
 
 
-	<h2>All Uploaded Files:</h2>
-	<ul>
-		<li th:each="file : ${files}">
-			<a th:href="${file}" target="_blank" th:text="${file.uri}"></a>
-		</li>
-	</ul>
+<!--	<h2>All Uploaded Files:</h2>-->
+<!--	<ul>-->
+<!--		<li th:each="file : ${files}">-->
+<!--			<a th:href="${file}" target="_blank" th:text="${file.uri}"></a>-->
+<!--		</li>-->
+<!--	</ul>-->
 
 	<hr>
 
 	</div>
 	<div class="container my-2">
-		<hr>
+
 		<h2>Invoice Items list</h2>
+		<hr>
 		<table border="1" class = "table table-striped table-responsive-md">
 			<thead>
 			<tr>
@@ -93,11 +140,11 @@
 			</thead>
 			<tbody>
 			<tr th:each="invoiceitem : ${invoiceItemList}">
-				<form id="update" style="float:left;display: flex; flex-direction: row;flex: 50px;" th:action="@{/updateItemFromInvoivce/invoiceId/{idInvoice}/InvoiceitemId/{idInvoiceitem}(idInvoice=${invoice.id},idInvoiceitem=${invoiceitem.id})}"></form>
+				<form th:id="${invoiceitem.id}" style="float:left;display: flex; flex-direction: row;flex: 50px;" th:action="@{/updateItemFromInvoivce/invoiceId/{idInvoice}/InvoiceitemId/{idInvoiceitem}(idInvoice=${invoice.id},idInvoiceitem=${invoiceitem.id})}"></form>
 				<td th:text="${invoiceitem.item.name}"></td>
 				<td th:text="${invoiceitem.item.price}"></td>
-				<td><input type="number" form="update" th:value="${invoiceitem.quantity}" style="margin-right: 5px" name="quantity2" id="quantity2" placeholder="quantity" class="form-control mb-4 col-4"></td>
-				<td><input type="number" form="update" th:value="${invoiceitem.discount}" style="margin-right: 5px" name="discount2" id="discount2" placeholder="discount" class="form-control mb-4 col-4"></td>
+				<td><input type="number" th:form="${invoiceitem.id}" th:value="${invoiceitem.quantity}" style="margin-right: 5px" name="quantity2" id="quantity2" placeholder="quantity" class="form-control mb-4 col-4"></td>
+				<td><input type="number" th:form="${invoiceitem.id}" th:value="${invoiceitem.discount}" style="margin-right: 5px" name="discount2" id="discount2" placeholder="discount" class="form-control mb-4 col-4"></td>
 				<td th:text="${invoiceitem.priceafterdiscount}"></td>
 
 				<!--				<td th:text="${invoiceItem.total}"></td>-->
@@ -106,7 +153,7 @@
 <!--						Delete</a>-->
 <!--					<a th:href="@{/updateItemFromInvoivce/invoiceId/{idInvoice}/idInvoiceitem/{idInvoiceitem}/q/{q}/d/{d}(idInvoice=${invoice.id},idInvoiceitem=${invoiceitem.id},q=${invoiceitem.quantity},d=${invoiceitem.discount})}" class="btn btn-info">-->
 <!--						Update</a>-->
-					<input type="submit" form="update" value="Update" style="margin-right: 5px;height: fit-content;width:250px" class="btn btn-info" />
+					<input type="submit" th:form="${invoiceitem.id}" value="Update" style="margin-right: 5px;height: fit-content;width:250px" class="btn btn-info" />
 				</td>
 				<!--					<a th:href="@{/viewInvoice/{id}(id=${invoice.id})}" class="btn" style="color:white;background-color: limegreen">View</a>-->
 
@@ -156,12 +203,14 @@
 			</thead>
 			<tbody>
 			<tr th:each="item : ${listItem}">
-				<form id="add" style="float:left;display: flex; flex-direction: row;flex: 50px;" th:action="@{/addItemToInvoivce/invoiceId/{idInvoice}/itemId/{idItem}(idInvoice=${invoice.id},idItem=${item.id})}"></form>
+				<form th:id="${item.id}" style="float:left;display: flex; flex-direction: row;flex: 50px;"
+					  th:action="@{/addItemToInvoivce/invoiceId/{idInvoice}/itemId/{idItem}
+				(idInvoice=${invoice.id},idItem=${item.id})}"></form>
 				<td th:text="${item.name}"></td>
 				<td th:text="${item.price}"></td>
-				<td><input type="number" form="add" style="margin-right: 5px" name="quantity1" id="quantity1" placeholder="quantity" th:value="${quantity1}" class="form-control mb-4 col-4"></td>
-				<td><input type="number" form="add" style="margin-right: 5px" name="discount1" id="discount1" placeholder="discount" th:value="${discount1}" class="form-control mb-4 col-4"></td>
-				<td><input type="submit" form="add" value="Add item to invoice" style="margin-right: 5px;height: fit-content;width:250px" class="btn btn-info" /></td>
+				<td><input type="number" th:form="${item.id}" style="margin-right: 5px" name="quantity1" id="quantity1" placeholder="quantity" th:value="${quantity1}" class="form-control mb-4 col-4"></td>
+				<td><input type="number" th:form="${item.id}" style="margin-right: 5px" name="discount1" id="discount1" placeholder="discount" th:value="${discount1}" class="form-control mb-4 col-4"></td>
+				<td><input type="submit" th:form="${item.id}" value="Add item to invoice" style="margin-right: 5px;height: fit-content;width:250px" class="btn btn-info" /></td>
 
 				<!--				<td> <a th:href="@{/updateCustomer/{id}(id=${item.id})}" class="btn btn-primary">Update</a>-->
 				<!--					<a th:href="@{/deleteCustomer/{id}(id=${item.id})}" class="btn btn-danger">Delete</a>-->

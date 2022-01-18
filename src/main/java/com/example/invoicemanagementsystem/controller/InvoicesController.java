@@ -146,7 +146,7 @@ public class InvoicesController {
 
 		List<Item> items=itemService.getAllItems();
 		model.addAttribute("listItem", items);
-		return "view_invoice1";
+		return "redirect:/showFormForUpdateInvoice/{idInvoice}";
 	}
 
 	@Secured({"ROLE_ADMIN","ROLE_USER"})
@@ -341,7 +341,7 @@ public class InvoicesController {
 	@GetMapping("/login")
 	public String login(@RequestParam(value = "error", required = false) String error,
 						@RequestParam(value = "logout", required = false) String logout,
-						Model model, Principal principal, RedirectAttributes flash, Locale locale) {
+						Model model, Principal principal) {
 		System.out.println("login done ..."+principal+error+" logout: "+logout);
 		if(principal != null) {
 			System.out.println("hiiii11111111111111111111111");
@@ -413,7 +413,36 @@ public String home(){
 		model.addAttribute("invoice", new Invoice());
 
 		model.addAttribute("listinvoices", listinvoices);
+		User user=userService.getUserById(userId);
+		model.addAttribute("isAdmin",hasRole("ROLE_ADMIN"));
+//		model.addAttribute("name",user.getFirstName()+" "+user.getLastName());
+//		model.addAttribute("name",user.getUsername());
+
 		return "indexInvoice";
+	}
+
+
+	private boolean hasRole(String role) {
+
+		SecurityContext context = SecurityContextHolder.getContext();
+
+		if (context == null) { return false; }
+		Authentication auth = context.getAuthentication();
+
+		if (auth == null) { return false; }
+		Collection<? extends GrantedAuthority> authorities = auth.getAuthorities();
+
+//		Check user authority
+//		 for(GrantedAuthority authority : authorities) {
+//		 if(role.equals(authority.getAuthority())) { logger.info("Hola " +
+//		 auth.getName() + " tu role es: " + authority.getAuthority()); return true; }
+//		 }
+//
+//		 return false;
+
+		// contains(GrantedAuthority) returns true or false if has the collection element or not
+		return authorities.contains(new SimpleGrantedAuthority(role));
+
 	}
 
 
