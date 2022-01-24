@@ -1,6 +1,10 @@
 package com.example.invoicemanagementsystem.model;
+import org.springframework.security.core.GrantedAuthority;
+
 import javax.persistence.*;
 import java.io.Serializable;
+
+
 
 @Entity
 @Table(name = "authorities", uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "authority"})})
@@ -11,11 +15,13 @@ public class Role implements Serializable {
     private Long id;
 
     private static final long serialVersionUID = 2699282209351614842L;
-    private String authority;
+
+    @Enumerated(EnumType.STRING)
+    private RoleEnum authority;
 
     public Role() {}
 
-    public Role(String authority) {
+    public Role(RoleEnum authority) {
         this.authority = authority;
     }
 
@@ -24,9 +30,11 @@ public class Role implements Serializable {
 
     public void setId(Long id) { this.id = id; }
 
-    public String getAuthority() { return authority; }
+  
+    public RoleEnum getAuthority() { return authority; }
 
-    public void setAuthority(String authority) { this.authority = authority; }
+    @Enumerated(EnumType.STRING)
+    public void setAuthority(RoleEnum authority) { this.authority = authority; }
 
     @Override
     public String toString() {
@@ -35,4 +43,7 @@ public class Role implements Serializable {
                 ", authority='" + authority + '\'' +
                 '}';
     }
+
+
+
 }

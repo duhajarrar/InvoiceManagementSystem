@@ -8,8 +8,24 @@
 	integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
 	crossorigin="anonymous">
 </head>
+<nav class="navbar navbar-inverse navbar-fixed-top" style="background-color: #41a4bf;">
+	<div class="container" style="float:left;display: flex; flex-direction: row;flex: 50px">
+		<!--			<img th:src="@{../static/img/payment.png}" width="40" height="40"/>-->
+		<h3 class="btn fas fa-file-invoice-dollar" style="font-size: 24px;color:white;">  Invoice Management System </h3>
+		<div th:if="${isAdmin}" style="">
+			<a th:href="@{/listCustomer}" class="btn" style="color:white;background-color: darkmagenta">Show Customers List</a>
+			<a th:href="@{/listFiles}" class="btn" style="color:white;background-color: cadetblue">Show Files List</a>
+			<a th:href="@{/listInvoice}" class="btn" style="color:white;background-color: crimson">Show Invoices List</a>
+		</div>
+		<a class="navbar-brand" style="margin-left: 10px;color:white;" href="#" th:href="@{/logout}">Logout </a>
+
+	</div>
+
+</nav>
+
 <body>
-	<div class="container">
+
+	<div class="container" th:if="${isAdmin}">
 		<h1>Customer Management System</h1>
 		<hr>
 		<h2>Save Customer</h2>
@@ -37,8 +53,12 @@
 				
 				<input type="text" th:field="*{username}"
 				placeholder="Customer username" class="form-control mb-4 col-4">
-				
-				<button type="submit" class="btn btn-info col-2"> Save Customer</button>
+
+			<input type="password" th:field="*{password}"
+				   placeholder="Customer password" class="form-control mb-4 col-4">
+
+
+			<button type="submit" class="btn btn-info col-2"> Save Customer</button>
 		</form>
 		
 		<hr>

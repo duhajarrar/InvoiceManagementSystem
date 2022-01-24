@@ -12,56 +12,56 @@
 --------------------------------------------------------------------
 DROP TABLE IF EXISTS users ;
 CREATE TABLE users (
-                       id long AUTO_INCREMENT PRIMARY KEY,
-                       username VARCHAR(250),
-                       first_name VARCHAR(250),
-                       last_name VARCHAR(250),
+                       id long AUTO_INCREMENT PRIMARY KEY NOT NULL,
+                       username VARCHAR(250) NOT NULL ,
+                       first_name VARCHAR(250) NOT NULL,
+                       last_name VARCHAR(250) NOT NULL,
                        enabled Boolean ,
 --                        role VARCHAR(250),
                        password VARCHAR(250));
 -------------------------------------------------------------------
 DROP TABLE IF EXISTS authorities;
 CREATE TABLE authorities (
-                    id long AUTO_INCREMENT PRIMARY KEY,
-                    user_id long,
+                    id long AUTO_INCREMENT PRIMARY KEY NOT NULL,
+                    user_id long NOT NULL,
                     authority VARCHAR(250) NOT NULL,
 --                     PRIMARY KEY(customer_id,authority),
                     FOREIGN KEY (user_id) REFERENCES users(id));
 ------------------------------------------------------------------
 DROP TABLE IF EXISTS Invoices ;
 CREATE TABLE Invoices (
-                           id long AUTO_INCREMENT PRIMARY KEY,
+                           id long AUTO_INCREMENT PRIMARY KEY NOT NULL,
                            title VARCHAR(250) NOT NULL,
                            creation_date DATE NOT NULL,
                            description VARCHAR(250) NOT NULL,
                            total long NOT NULL,
-                           user_id long,
+                           user_id long NOT NULL,
                            FOREIGN KEY (user_id) REFERENCES users(id));
 --------------------------------------------------------------------------------
 DROP TABLE IF EXISTS Item ;
 CREATE TABLE Item (
-                    id long AUTO_INCREMENT PRIMARY KEY,
+                    id long AUTO_INCREMENT PRIMARY KEY NOT NULL,
                     name VARCHAR(250) NOT NULL,
                     price int NOT NULL);
 --------------------------------------------------------------------------------
 DROP TABLE IF EXISTS Invoice_items ;
 CREATE TABLE Invoice_items (
-                          id long AUTO_INCREMENT PRIMARY KEY,
-                          priceafterdiscount int,
+                          id long AUTO_INCREMENT PRIMARY KEY NOT NULL,
+                          priceafterdiscount int NOT NULL,
                           quantity int NOT NULL,
-                          discount int,
-                          item_id long,
-                          invoice_id long,
+                          discount int NOT NULL,
+                          item_id long NOT NULL,
+                          invoice_id long NOT NULL,
 --                           PRIMARY KEY (item_id),
                           FOREIGN KEY (invoice_id) REFERENCES Invoices(id),
                           FOREIGN KEY (item_id) REFERENCES Item(id));
 --------------------------------------------------------------------------------
 DROP TABLE IF EXISTS file_response ;
 CREATE TABLE file_response (
-                               id long AUTO_INCREMENT PRIMARY KEY,
-                               invoice_id long,
-                               name VARCHAR(250),
-                               uri VARCHAR(250),
-                               type VARCHAR(250),
-                               size long,
+                               id long AUTO_INCREMENT PRIMARY KEY NOT NULL,
+                               invoice_id long NOT NULL,
+                               name VARCHAR(250) NOT NULL,
+                               uri VARCHAR(250) NOT NULL,
+                               type VARCHAR(250) NOT NULL,
+                               size long NOT NULL,
                                FOREIGN KEY (invoice_id) REFERENCES Invoices(id));

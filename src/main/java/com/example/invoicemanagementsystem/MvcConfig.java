@@ -17,14 +17,6 @@ import java.util.Locale;
 @Configuration
 public class MvcConfig implements WebMvcConfigurer {
 
-
-
-	@Override
-	public void addResourceHandlers(ResourceHandlerRegistry registry){
-		registry.addResourceHandler("/**")
-				.addResourceLocations("classpath:/static/");
-	}
-
 	// Method for register view controller
 	public void addViewControllers(ViewControllerRegistry registry) {
 		registry.addViewController("/error_403").setViewName("error_403");

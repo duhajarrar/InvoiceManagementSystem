@@ -17,5 +17,7 @@ public interface FileResposeRepository extends JpaRepository<FileResponse, Long>
     List<FileResponse> getFileByInvoiceId(long idInvoice);
     Page<FileResponse> findFileResponseByInvoice_Id(Long id,Pageable pageable);
 
+//    Page<FileResponse> findFileResponseByUser(Long id,Pageable pageable);
+
 
 }

@@ -16,17 +16,23 @@
 	}
 </style>
 <body>
-<nav class="navbar navbar-inverse navbar-fixed-top">
-	<div class="container">
-		<div class="row">
-			<div class="col-md-6 col-md-offset-3">
-				<a class="navbar-brand" href="#" th:href="@{/logout}" style="color:white;">Logout </a>
-			</div>
+<nav class="navbar navbar-inverse navbar-fixed-top" style="background-color: #41a4bf;">
+	<div class="container" style="float:left;display: flex; flex-direction: row;flex: 50px">
+		<!--			<img th:src="@{../static/img/payment.png}" width="40" height="40"/>-->
+		<h3 class="btn fas fa-file-invoice-dollar" style="font-size: 24px;color:white;">  Invoice Management System </h3>
+		<div th:if="${isAdmin}" style="">
+<!--			<a th:href="@{/listCustomer}" class="btn" style="color:white;background-color: darkmagenta">Show Customers List</a>-->
+			<a th:href="@{/listFiles}" class="btn" style="color:white;background-color: cadetblue">Show Files List</a>
+			<a th:href="@{/listInvoice}" class="btn" style="color:white;background-color: crimson">Show Invoices List</a>
 		</div>
+		<a class="navbar-brand" style="margin-left: 10px;color:white;" href="#" th:href="@{/logout}">Logout </a>
+
 	</div>
+
 </nav>
 
-	<div class="container my-2">
+
+	<div class="container my-2" th:if="${isAdmin}">
 	<h1>Customers List</h1>
 		<div th:if="${param.success}">
 			<div class="alert alert-info">Customer successfully added!</div>

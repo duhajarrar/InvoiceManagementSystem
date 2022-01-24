@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" class="h-100"><head>
+
+	<meta charset="UTF-8">
+	<title>Invoices Management System</title>
+
+	<link rel="stylesheet"
+		  href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+</head>
+<style>
+	.navbar {
+		background-color: #41a4bf;
+	}
+</style>
+<body>
+
+	<header></header>
+	<nav class="navbar navbar-inverse navbar-fixed-top" style="background-color: #41a4bf;">
+		<div class="container">
+			<img th:src="@{../static/img/payment.png}" width="40" height="40"/>
+			<a class="navbar-brand" style="color:white;">Invoice Management System </a>
+			<a class="navbar-brand" style="margin-left: 700px;color:white;" href="#" th:href="@{/logout}">Logout </a>
+
+		</div>
+	</nav>
+	<div class="container py-4">
+
+		<div class="card bg-danger text-white">
+
+			<div class="card-header"><h2>Error: Access Denied</h2></div>
+			<div class="card-body">
+
+				<h5 class="card-title">You haven't permission to access this site.
+				</h5>
+				<a th:href="@{/listInvoice}" class="btn btn-outline-light" role="button">Back to invoices list</a>
+
+			</div>
+
+
+		</div>
+
+	</div>
+
+	<footer></footer>
+
+</body>
+
+</html>

@@ -52,7 +52,7 @@ public class InvoicesController {
 
 	Long userId;
 
-	@Secured({"ROLE_ADMIN","ROLE_USER"})
+	@Secured({RoleEnum.Code.ROLE_ADMIN,RoleEnum.Code.ROLE_USER})
 	@GetMapping("/addNewItem")
 	public String addNewItem(Model model){
 		Item item=new Item();
@@ -60,36 +60,36 @@ public class InvoicesController {
 		return "new_item";
 	}
 
-	@Secured({"ROLE_ADMIN","ROLE_USER"})
+	@Secured({RoleEnum.Code.ROLE_ADMIN,RoleEnum.Code.ROLE_USER})
 	@PostMapping("/saveItem/{idInvoice}")
 	public String saveItem(@PathVariable ( value = "idInvoice") long idInvoice,@ModelAttribute("newInvoiceItem") InvoiceItems newInvoiceItem,Model model) {
-		Item newItem=new Item();
-		newItem.setName(newInvoiceItem.getItem().getName());
-		newItem.setPrice(newInvoiceItem.getItem().getPrice());
-		itemService.saveItem(newItem);
-		System.out.println(newItem.toString()+"*******************************");
+		if(newInvoiceItem.getItem().getName()!=null && (newInvoiceItem.getItem().getPrice()+"") != null && (newInvoiceItem.getDiscount()+"")!=null && (newInvoiceItem.getQuantity()+"")!=null) {
+			Item newItem = new Item();
+			newItem.setName(newInvoiceItem.getItem().getName());
+			newItem.setPrice(newInvoiceItem.getItem().getPrice());
+			itemService.saveItem(newItem);
+			System.out.println(newItem.toString() + "*******************************");
 
-		Invoice invoice=invoiceService.getInvoiceById(idInvoice);
-		System.out.println(newInvoiceItem.toString()+"++++++++++++++++++++++++++++++");
-		newInvoiceItem.setItem(newItem);
-		System.out.println(newInvoiceItem.toString()+"+++++++++++++++++++++++222222222222+++++++");
-		invoice.addItem(newInvoiceItem);
-		System.out.println(invoice.toString());
+			Invoice invoice = invoiceService.getInvoiceById(idInvoice);
+			System.out.println(newInvoiceItem.toString() + "++++++++++++++++++++++++++++++");
+			newInvoiceItem.setItem(newItem);
+			System.out.println(newInvoiceItem.toString() + "+++++++++++++++++++++++222222222222+++++++");
+			invoice.addItem(newInvoiceItem);
+			System.out.println(invoice.toString());
 
+			newInvoiceItem.setInvoice(invoice);
+			invoiceService.saveInvoice(invoice);
+			model.addAttribute("invoice", invoice);
 
+			List<InvoiceItems> invoiceItemList = invoice.getItems();
+			model.addAttribute("invoiceItemList", invoiceItemList);
 
-		invoiceService.saveInvoice(invoice);
-		model.addAttribute("invoice", invoice);
+			newInvoiceItem = new InvoiceItems();
+			model.addAttribute("newInvoiceItem", newInvoiceItem);
 
-		List<InvoiceItems> invoiceItemList =invoice.getItems();
-		model.addAttribute("invoiceItemList", invoiceItemList);
-
-		newInvoiceItem= new InvoiceItems();
-		model.addAttribute("newInvoiceItem",newInvoiceItem);
-
-		List<Item> items=itemService.getAllItems();
-		model.addAttribute("listItem", items);
-
+			List<Item> items = itemService.getAllItems();
+			model.addAttribute("listItem", items);
+		}
 		return "redirect:/viewInvoice/{idInvoice}";
 	}
 
@@ -98,7 +98,7 @@ public class InvoicesController {
 //	@GetMapping("/addItemToInvoivce/invoiceId/{idInvoice}/itemId/{idItem}")
 
 //	@GetMapping("/addItemToInvoivce/invoiceId/{idInvoice}/itemId/{idItem}/quantity/{quantity}/discount/{discount}")
-	@Secured({"ROLE_ADMIN","ROLE_USER"})
+	@Secured({RoleEnum.Code.ROLE_ADMIN,RoleEnum.Code.ROLE_USER})
 	@GetMapping("/addItemToInvoivce/invoiceId/{idInvoice}/itemId/{idItem}")
 	public String addItemToInvoice(@PathVariable ( value = "idInvoice") long idInvoice,@PathVariable ( value = "idItem") long idItem,@RequestParam("discount1") Integer discount,@RequestParam("quantity1") Integer quantity,Model model) throws ParseException {
 //		quantity=1;
@@ -146,10 +146,13 @@ public class InvoicesController {
 
 		List<Item> items=itemService.getAllItems();
 		model.addAttribute("listItem", items);
+		model.addAttribute("isAdmin",hasRole(RoleEnum.Code.ROLE_ADMIN));
+		model.addAttribute("isUser",hasRole(RoleEnum.Code.ROLE_USER));
+		model.addAttribute("isAdminOrUser",hasRole(RoleEnum.Code.ROLE_ADMIN)|hasRole(RoleEnum.Code.ROLE_USER));
 		return "redirect:/showFormForUpdateInvoice/{idInvoice}";
 	}
 
-	@Secured({"ROLE_ADMIN","ROLE_USER"})
+	@Secured({RoleEnum.Code.ROLE_ADMIN,RoleEnum.Code.ROLE_USER})
 	@GetMapping("/deleteItemFromInvoivce/invoiceId/{idInvoice}/InvoiceitemId/{idInvoiceitem}")
 	public String deleteItemFromInvoivce(@PathVariable ( value = "idInvoice") long idInvoice,@PathVariable ( value = "idInvoiceitem") long idInvoiceitem,Model model){
 		Invoice invoice=invoiceService.getInvoiceById(idInvoice);
@@ -171,7 +174,7 @@ public class InvoicesController {
 		return "redirect:/viewInvoice/{idInvoice}";
 	}
 
-	@Secured({"ROLE_ADMIN","ROLE_USER"})
+	@Secured({RoleEnum.Code.ROLE_ADMIN,RoleEnum.Code.ROLE_USER})
 	@GetMapping("/updateItemFromInvoivce/invoiceId/{idInvoice}/InvoiceitemId/{idInvoiceitem}")
 		public String updateItemFromInvoivce(@PathVariable ( value = "idInvoice") long idInvoice,@PathVariable ( value = "idInvoiceitem") long idInvoiceitem,@RequestParam("discount2") Integer discount,@RequestParam("quantity2") Integer quantity,Model model) throws ParseException {
 		System.out.println("+++++++++++++++++++ *********** "+quantity+"          "+discount);
@@ -196,6 +199,9 @@ public class InvoicesController {
 
 		InvoiceItems newInvoiceItem= new InvoiceItems();
 		model.addAttribute("newInvoiceItem",newInvoiceItem);
+		model.addAttribute("isAdmin",hasRole(RoleEnum.Code.ROLE_ADMIN));
+		model.addAttribute("isUser",hasRole(RoleEnum.Code.ROLE_USER));
+		model.addAttribute("isAdminOrUser",hasRole(RoleEnum.Code.ROLE_ADMIN)|hasRole(RoleEnum.Code.ROLE_USER));
 		return "redirect:/showFormForUpdateInvoice/{idInvoice}";
 	}
 
@@ -210,7 +216,7 @@ public class InvoicesController {
 			return findPaginated(1, "creationDate", "desc", model,keyword);
 	}
 
-	@Secured({"ROLE_ADMIN","ROLE_USER"})
+	@Secured({RoleEnum.Code.ROLE_ADMIN,RoleEnum.Code.ROLE_USER})
 	@GetMapping("/showNewInvoiceForm")
 	public String showNewInvoiceForm(Model model) {
 		Invoice invoice = new Invoice();
@@ -219,36 +225,45 @@ public class InvoicesController {
 		model.addAttribute("invoiceItem", invoiceItemList);
 		List<Item> items=itemService.getAllItems();
 		model.addAttribute("listItem", items);
+		model.addAttribute("isAdmin",hasRole(RoleEnum.Code.ROLE_ADMIN));
+		model.addAttribute("isUser",hasRole(RoleEnum.Code.ROLE_USER));
+		model.addAttribute("isAdminOrUser",hasRole(RoleEnum.Code.ROLE_ADMIN)|hasRole(RoleEnum.Code.ROLE_USER));
 		return "new_invoice";
 	}
 
-	@Secured({"ROLE_ADMIN","ROLE_USER"})
+	@Secured({RoleEnum.Code.ROLE_ADMIN,RoleEnum.Code.ROLE_USER})
 	@PostMapping("/saveInvoice")
 	public String saveInvoice(@ModelAttribute("invoice") Invoice invoice,Model model) throws ParseException {
 //		System.out.println(invoice.toString());
-		invoice.setUser(userService.getUserById(userId));
-		invoiceService.saveInvoice(invoice);
-		model.addAttribute("invoice", invoice);
+		if(invoice.getTitle()!=null & invoice.getDescription()!=null && invoice.getCreationDate()!=null ) {
+			invoice.setUser(userService.getUserById(userId));
+			invoiceService.saveInvoice(invoice);
+			model.addAttribute("invoice", invoice);
 
-		List<FileResponse> files=fileResposeService.getFileByInvoiceId(invoice.getId());
-		model.addAttribute("files",files);
+			List<FileResponse> files = fileResposeService.getFileByInvoiceId(invoice.getId());
+			model.addAttribute("files", files);
 
-		List<Item> items=itemService.getAllItems();
-		model.addAttribute("listItem", items);
+			List<Item> items = itemService.getAllItems();
+			model.addAttribute("listItem", items);
 
-		List<InvoiceItems> invoiceItemList =invoice.getItems();
-		model.addAttribute("invoiceItemList", invoiceItemList);
+			List<InvoiceItems> invoiceItemList = invoice.getItems();
+			model.addAttribute("invoiceItemList", invoiceItemList);
 
-		InvoiceItems newInvoiceItem= new InvoiceItems();
-		model.addAttribute("newInvoiceItem",newInvoiceItem);
+			InvoiceItems newInvoiceItem = new InvoiceItems();
+			model.addAttribute("newInvoiceItem", newInvoiceItem);
+			model.addAttribute("isAdmin", hasRole(RoleEnum.Code.ROLE_ADMIN));
+			model.addAttribute("isUser", hasRole(RoleEnum.Code.ROLE_USER));
+			model.addAttribute("isAdminOrUser", hasRole(RoleEnum.Code.ROLE_ADMIN) | hasRole(RoleEnum.Code.ROLE_USER));
 
 //		return "redirect:/viewInvoice/{"+invoice.getId()+"}";
 //		return "redirect:/listInvoice";
-	return "view_invoice1";
+			return "view_invoice1";
+		}
+		return "redirect:/listInvoice";
 	}
 
 
-	@Secured({"ROLE_ADMIN","ROLE_USER"})
+	@Secured({RoleEnum.Code.ROLE_ADMIN,RoleEnum.Code.ROLE_USER})
 	@GetMapping("/showFormForUpdateInvoice/{id}")
 	public String showFormForUpdateInvoice(@PathVariable ( value = "id") long id, Model model) {
 		Invoice invoice = invoiceService.getInvoiceById(id);
@@ -265,7 +280,9 @@ public class InvoicesController {
 
 		InvoiceItems newInvoiceItem= new InvoiceItems();
 		model.addAttribute("newInvoiceItem",newInvoiceItem);
-
+		model.addAttribute("isAdmin",hasRole(RoleEnum.Code.ROLE_ADMIN));
+		model.addAttribute("isUser",hasRole(RoleEnum.Code.ROLE_USER));
+		model.addAttribute("isAdminOrUser",hasRole(RoleEnum.Code.ROLE_ADMIN)|hasRole(RoleEnum.Code.ROLE_USER));
 
 		return "update_invoice";
 	}
@@ -280,6 +297,11 @@ public class InvoicesController {
 
 	}
 
+	@GetMapping("/listFile")
+	public String viewFiles(Model model) {
+		return findPaginatedFile(1, "id", "asc", model,(long)-1);
+
+	}
 	@GetMapping("/pageFile/{pageNo}")
 	public String findPaginatedFile(@PathVariable (value = "pageNo") int pageNo,
 								@RequestParam("sortField") String sortField,
@@ -287,7 +309,7 @@ public class InvoicesController {
 								Model model,Long id) {
 		int pageSize = 10;
 
-		Page<FileResponse> page = fileResposeService.findPaginated(pageNo, pageSize, sortField, sortDir,id);
+		Page<FileResponse> page = fileResposeService.findPaginated(pageNo, pageSize, sortField, sortDir,id,userId);
 		List<FileResponse> listFiles = page.getContent();
 
 		model.addAttribute("currentPage", pageNo);
@@ -299,6 +321,9 @@ public class InvoicesController {
 		model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
 		model.addAttribute("id",id);
 		model.addAttribute("files", listFiles);
+		model.addAttribute("isAdmin",hasRole(RoleEnum.Code.ROLE_ADMIN));
+		model.addAttribute("isUser",hasRole(RoleEnum.Code.ROLE_USER));
+		model.addAttribute("isAdminOrUser",hasRole(RoleEnum.Code.ROLE_ADMIN)|hasRole(RoleEnum.Code.ROLE_USER));
 		return "indexFiles";
 	}
 
@@ -319,10 +344,13 @@ public class InvoicesController {
 
 		InvoiceItems newInvoiceItem= new InvoiceItems();
 		model.addAttribute("newInvoiceItem",newInvoiceItem);
+		model.addAttribute("isAdmin",hasRole(RoleEnum.Code.ROLE_ADMIN));
+		model.addAttribute("isUser",hasRole(RoleEnum.Code.ROLE_USER));
+		model.addAttribute("isAdminOrUser",hasRole(RoleEnum.Code.ROLE_ADMIN)|hasRole(RoleEnum.Code.ROLE_USER));
 		return "view_invoice";
 	}
 
-	@Secured({"ROLE_ADMIN","ROLE_USER"})
+	@Secured({RoleEnum.Code.ROLE_ADMIN,RoleEnum.Code.ROLE_USER})
 	@GetMapping("/deleteInvoice/{id}")
 	public String deleteInvoice(@PathVariable (value = "id") long id) {
 
@@ -414,15 +442,15 @@ public String home(){
 
 		model.addAttribute("listinvoices", listinvoices);
 		User user=userService.getUserById(userId);
-		model.addAttribute("isAdmin",hasRole("ROLE_ADMIN"));
-//		model.addAttribute("name",user.getFirstName()+" "+user.getLastName());
-//		model.addAttribute("name",user.getUsername());
+		model.addAttribute("isAdmin",hasRole(RoleEnum.Code.ROLE_ADMIN));
+		model.addAttribute("isUser",hasRole(RoleEnum.Code.ROLE_USER));
+		model.addAttribute("isAdminOrUser",hasRole(RoleEnum.Code.ROLE_ADMIN)|hasRole(RoleEnum.Code.ROLE_USER));
 
 		return "indexInvoice";
 	}
 
 
-	private boolean hasRole(String role) {
+	 boolean hasRole(String role) {
 
 		SecurityContext context = SecurityContextHolder.getContext();
 
@@ -431,16 +459,6 @@ public String home(){
 
 		if (auth == null) { return false; }
 		Collection<? extends GrantedAuthority> authorities = auth.getAuthorities();
-
-//		Check user authority
-//		 for(GrantedAuthority authority : authorities) {
-//		 if(role.equals(authority.getAuthority())) { logger.info("Hola " +
-//		 auth.getName() + " tu role es: " + authority.getAuthority()); return true; }
-//		 }
-//
-//		 return false;
-
-		// contains(GrantedAuthority) returns true or false if has the collection element or not
 		return authorities.contains(new SimpleGrantedAuthority(role));
 
 	}

@@ -95,6 +95,14 @@ public class InvoiceItems implements Serializable {
         this.priceafterdiscount = priceafterdiscount;
     }
 
+    public Invoice getInvoice() {
+        return invoice;
+    }
+
+    public void setInvoice(Invoice invoice) {
+        this.invoice = invoice;
+    }
+
     @Override
     public String toString() {
         return "InvoiceItems{" +

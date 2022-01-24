@@ -7,6 +7,21 @@
 <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 </head>
+<nav class="navbar navbar-inverse navbar-fixed-top" style="background-color: #41a4bf;">
+	<div class="container" style="float:left;display: flex; flex-direction: row;flex: 50px">
+		<!--			<img th:src="@{../static/img/payment.png}" width="40" height="40"/>-->
+		<h3 class="btn fas fa-file-invoice-dollar" style="font-size: 24px;color:white;">  Invoice Management System </h3>
+		<div th:if="${isAdmin}" style="">
+			<a th:href="@{/listCustomer}" class="btn" style="color:white;background-color: darkmagenta">Show Customers List</a>
+			<a th:href="@{/listFiles}" class="btn" style="color:white;background-color: cadetblue">Show Files List</a>
+			<a th:href="@{/listInvoice}" class="btn" style="color:white;background-color: crimson">Show Invoices List</a>
+		</div>
+		<a class="navbar-brand" style="margin-left: 10px;color:white;" href="#" th:href="@{/logout}">Logout </a>
+
+	</div>
+
+</nav>
+
 <body>
 	<div class="container">
 		<h1>Customer Management System</h1>
@@ -31,9 +46,7 @@
 				<input type="text" th:field="*{lastName}" class="form-control mb-4 col-4">
 				
 			<input type="hidden" th:field="*{username}" class="form-control mb-4 col-4" >
-			<input type="hidden" th:field="*{role}"/>
 			<input type="hidden" th:field="*{password}" />
-			<input type="hidden" th:field="*{confirmPassword}" />
 			<input type="hidden" th:field="*{enabled}" />
 				<button type="submit" class="btn btn-info col-2"> Update Customer</button>
 		</form>

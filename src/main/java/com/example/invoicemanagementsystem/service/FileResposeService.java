@@ -43,15 +43,32 @@ public class FileResposeService {
        return files;
     }
 
-
-    InvoiceService invoiceService;
-    public Page<FileResponse> findPaginated(int pageNo, int pageSize, String sortField, String sortDirection,Long id) {
+    @Autowired
+    UserService userService;
+    public Page<FileResponse> findPaginated(int pageNo, int pageSize, String sortField, String sortDirection,Long id,Long userId) {
         Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() :
                 Sort.by(sortField).descending();
-
+        User user = userService.getUserById(userId);
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
-        //Invoice invoice=invoiceService.getInvoiceById(id);
         return fileResposeRepository.findFileResponseByInvoice_Id(id,pageable);
     }
 
-}
+
+//    public Page<FileResponse> findPaginatedAll(int pageNo, int pageSize, String sortField, String sortDirection,Long userId) {
+//        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() :
+//                Sort.by(sortField).descending();
+//        User user = userService.getUserById(userId);
+//        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
+//        if ("ROLE_USER".equals(user.getAuthorities().get(0).getAuthority())){
+//            return fileResposeRepository.findFileResponseBy(userId,pageable);
+//        }else if("ROLE_ADMIN".equals(user.getAuthorities().get(0).getAuthority())||"ROLE_AUDIOTR".equals(user.getAuthorities().get(0).getAuthority())){
+//            return this.fileResposeRepository.findAll(pageable);
+//        }else{
+//            return null;
+//        }
+//
+//    }
+
+    }
+
+

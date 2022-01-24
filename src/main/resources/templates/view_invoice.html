@@ -9,6 +9,21 @@
 </head>
 <body>
 <nav class="navbar navbar-inverse navbar-fixed-top" style="background-color: #41a4bf;">
+	<div class="container" style="float:left;display: flex; flex-direction: row;flex: 50px">
+		<!--			<img th:src="@{../static/img/payment.png}" width="40" height="40"/>-->
+		<h3 class="btn fas fa-file-invoice-dollar" style="font-size: 24px;color:white;">  Invoice Management System </h3>
+		<div th:if="${isAdmin}" style="">
+			<a th:href="@{/listCustomer}" class="btn" style="color:white;background-color: darkmagenta">Show Customers List</a>
+			<a th:href="@{/listFiles}" class="btn" style="color:white;background-color: cadetblue">Show Files List</a>
+			<a th:href="@{/listInvoice}" class="btn" style="color:white;background-color: crimson">Show Invoices List</a>
+		</div>
+		<a class="navbar-brand" style="margin-left: 10px;color:white;" href="#" th:href="@{/logout}">Logout </a>
+
+	</div>
+
+</nav>
+
+<nav class="navbar navbar-inverse navbar-fixed-top" style="background-color: #41a4bf;">
 	<div class="container">
 		<img src="../static/img/payment.png" width="40" height="40"/>
 		<a class="navbar-brand" style="color:white;">Invoice Management System </a>
@@ -18,15 +33,12 @@
 </nav>
 	<div class="container">
 
-<!--		<h1>Invoice Management System</h1>-->
-
 		<h2>View Invoice</h2>
 		<hr>
 		<div style="">
 
 		<form action="#"  th:object="${invoice}" style="background-color: aliceblue;border-color: aliceblue;border-radius: 15px;border-style: solid;margin-bottom: 30px;width: 1070px;height: 150px">
 			<div style="float:left;display: flex; flex-direction: column;flex: 50px;padding-top: 5px;padding-left: 10px;">
-			<!-- Add hidden form field to handle update -->
 			<div style="float:left;display: flex; flex-direction: row;flex: 50px;padding-top: 10px;padding-left: 10px;">
 				<input type="hidden" th:field="*{id}" />
 
@@ -53,7 +65,6 @@
 				<label  style="margin-right: 15px">Total</label>
 					<input type="number" th:field="*{total}" disabled='disabled'style="margin-right: 15px">
 				</div>
-					<!--			<button type="submit" class="btn btn-info col-2"> Update Invoice</button>-->
 				</div>
 				<a style="padding-left: 10px;padding-top: 15px" th:href = "@{/listInvoice}"> Back to Invoice List</a>
 			</div>
@@ -78,28 +89,26 @@
 			<thead>
 			<tr>
 				<th>
-					<a th:href="@{'/page/' + ${currentPage} + '?sortField=id&sortDir=' + ${reverseSortDir}}">
+					<a th:href="@{'/pageInvoice/' + ${currentPage} + '?sortField=name&sortDir=' + ${reverseSortDir}}">
 						Name</a>
 				</th>
 				<th>
-					<a th:href="@{'/page/' + ${currentPage} + '?sortField=id&sortDir=' + ${reverseSortDir}}">
-						Price</a>
+					<a th:href="@{'/pageInvoice/' + ${currentPage} + '?sortField=price&sortDir=' + ${reverseSortDir}}">
+						Price/Unit</a>
 				</th>
 				<th>
-					<a th:href="@{'/page/' + ${currentPage} + '?sortField=description&sortDir=' + ${reverseSortDir}}">
-						quantity</a>
+					<a th:href="@{'/pageInvoice/' + ${currentPage} + '?sortField=quantity&sortDir=' + ${reverseSortDir}}">
+						Quantity</a>
 				</th>
 				<th>
-					<a th:href="@{'/page/' + ${currentPage} + '?sortField=discount&sortDir=' + ${reverseSortDir}}">
-						discount</a>
+					<a th:href="@{'/pageInvoice/' + ${currentPage} + '?sortField=discount&sortDir=' + ${reverseSortDir}}">
+						Discount</a>
 				</th>
 				<th>
-					<a th:href="@{'/page/' + ${currentPage} + '?sortField=priceafterdiscount&sortDir=' + ${reverseSortDir}}">
-						Price After Discount</a>
+					<a th:href="@{'/pageInvoice/' + ${currentPage} + '?sortField=priceafterdiscount&sortDir=' + ${reverseSortDir}}">
+						Total Price After Discount</a>
 				</th>
 
-<!--				<th>Delete </th>-->
-<!--				<th>Update</th>-->
 			</tr>
 			</thead>
 			<tbody>
@@ -107,20 +116,10 @@
 				<form id="update" style="float:left;display: flex; flex-direction: row;flex: 50px;" th:action="@{/updateItemFromInvoivce/invoiceId/{idInvoice}/InvoiceitemId/{idInvoiceitem}(idInvoice=${invoice.id},idInvoiceitem=${invoiceitem.id})}"></form>
 				<td th:text="${invoiceitem.item.name}"></td>
 				<td th:text="${invoiceitem.item.price}"></td>
-<!--				<td><input type="number" form="update" th:value="${invoiceitem.quantity}" style="margin-right: 5px" name="quantity2" id="quantity2" placeholder="quantity" class="form-control mb-4 col-4"></td>-->
-<!--				<td><input type="number" form="update" th:value="${invoiceitem.discount}" style="margin-right: 5px" name="discount2" id="discount2" placeholder="discount" class="form-control mb-4 col-4"></td>-->
 				<td th:text="${invoiceitem.quantity}"></td>
 				<td th:text="${invoiceitem.discount}"></td>
 				<td th:text="${invoiceitem.priceafterdiscount}"></td>
 
-				<!--				<td th:text="${invoiceItem.total}"></td>-->
-<!--				<td>-->
-<!--					<a th:href="@{/deleteItemFromInvoivce/invoiceId/{idInvoice}/InvoiceitemId/{idInvoiceitem}(idInvoice=${invoice.id},idInvoiceitem=${invoiceitem.id})}" class="btn btn-danger">-->
-<!--						Delete</a>-->
-<!--				</td>-->
-<!--				<td>-->
-<!--					<input type="submit" form="update" value="Update" style="margin-right: 5px;height: fit-content;" class="btn btn-info" />-->
-<!--				</td>-->
 			</tr>
 			</tbody>
 		</table>

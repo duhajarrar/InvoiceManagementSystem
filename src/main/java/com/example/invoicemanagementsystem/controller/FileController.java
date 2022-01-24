@@ -2,6 +2,8 @@ package com.example.invoicemanagementsystem.controller;
 
 import com.example.invoicemanagementsystem.model.FileResponse;
 import com.example.invoicemanagementsystem.model.Invoice;
+import com.example.invoicemanagementsystem.model.Role;
+import com.example.invoicemanagementsystem.model.RoleEnum;
 import com.example.invoicemanagementsystem.service.FileResposeService;
 import com.example.invoicemanagementsystem.service.InvoiceService;
 import com.example.invoicemanagementsystem.service.StorageService;
@@ -33,22 +35,20 @@ public class FileController {
 //    @Autowired
 //    private FileResponseService fileResponseService;
 
+    @Autowired
+    private InvoicesController invoicesController;
 
     public FileController(StorageService storageService) {
         this.storageService = storageService;
     }
-    @Secured("ROLE_ADMIN")
+    @Secured(RoleEnum.Code.ROLE_ADMIN)
     @GetMapping("/listFiles")
     public String listAllFiles(Model model){
-//        model.addAttribute("files", storageService.loadAll().map(
-//                        path -> ServletUriComponentsBuilder.fromCurrentContextPath()
-//                                .path("/download/")
-//                                .path(path.getFileName().toString())
-//                                .toUriString())
-//                .collect(Collectors.toList()));
-
         List<FileResponse> files=fileResposeService.getAllFiles();
         model.addAttribute("files",files);
+        model.addAttribute("isAdmin",invoicesController.hasRole(RoleEnum.Code.ROLE_ADMIN));
+        model.addAttribute("isAdminOrUser",invoicesController.hasRole(RoleEnum.Code.ROLE_ADMIN)|invoicesController.hasRole(RoleEnum.Code.ROLE_USER));
+
         return "listFiles";
     }
 

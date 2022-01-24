@@ -1,5 +1,6 @@
 package com.example.invoicemanagementsystem.controller;
 
+import com.example.invoicemanagementsystem.model.RoleEnum;
 import com.example.invoicemanagementsystem.model.User;
 //import com.example.invoicemanagementsystem.model.Role;
 import com.example.invoicemanagementsystem.model.Role;
@@ -35,7 +36,7 @@ public class UserController {
 	protected final Log logger = LogFactory.getLog(this.getClass());
 
 	// display list of Users
-	@Secured("ROLE_ADMIN")
+	@Secured(RoleEnum.Code.ROLE_ADMIN)
 	@GetMapping("/listCustomer")
 	public String viewHomePage(Model model, Authentication authentication) {
 		if (authentication != null) {
@@ -45,46 +46,53 @@ public class UserController {
 		//System.out.println(authentication.getName());
 		return findPaginated(1, "firstName", "asc", model);
 	}
-
-	@Secured("ROLE_ADMIN")
+@Autowired
+InvoicesController invoicesController;
+	@Secured(RoleEnum.Code.ROLE_ADMIN)
 	@GetMapping("/showNewCustomerForm")
 	public String showNewCustomerForm(Model model) {
 		// create model attribute to bind form data
 		User customer = new User();
 		model.addAttribute("customer", customer);
+		model.addAttribute("isAdmin",invoicesController.hasRole(RoleEnum.Code.ROLE_ADMIN));
 		return "new_Customer";
 	}
 
-	@Secured("ROLE_ADMIN")
+	@Secured(RoleEnum.Code.ROLE_ADMIN)
 	@PostMapping("/saveCustomer")
 	public String saveUser(@ModelAttribute("customer") User customer) {
 		// save Customer to database
 		//customer.setRole(new Role("USER"));
 		System.out.println(customer.toString());
-		if(userService.findByUsername(customer.getUsername())==null){
+		if(userService.findByUsername(customer.getUsername())==null && !customer.getUsername().equals("") && !customer.getLastName().equals("") && !customer.getFirstName().equals("") && !customer.getPassword().equals("")){
 			List<Role> role=new ArrayList<>();
-			role.add(new Role("USER"));
+			role.add(new Role(RoleEnum.ROLE_USER));
 			customer.setAuthorities(role);
 //			customer.setRole("USER");
 			userService.saveUser(customer);
-		}else{
+			return "redirect:/listCustomer?success";
+
+		}else if (userService.findByUsername(customer.getUsername())!=null){
 			System.out.println(customer.getUsername()+" => username used,try to register using another username .. " );
 			return "redirect:/showNewCustomerForm?error";
 			//throw new RuntimeException(customer.getusername()+" => username used,try to register using another username .. " );
 			//return "redirect:/registration?error";
 		}
-		return "redirect:/listCustomer?success";
+		else{
+			return "redirect:/listCustomer";
+		}
 	}
 
-	@Secured("ROLE_ADMIN")
+	@Secured(RoleEnum.Code.ROLE_ADMIN)
 	@PostMapping("/updateCustomer")
 	public String updateCustomer(@ModelAttribute("customer") User customer) {
 			System.out.println(customer.toString()+"+++++++++++");
 			userService.updateUser(customer);
-		    return "redirect:/listCustomer?success1";
+
+		return "redirect:/listCustomer?success1";
 	}
 
-	@Secured("ROLE_ADMIN")
+	@Secured(RoleEnum.Code.ROLE_ADMIN)
 	@GetMapping("/updateCustomer/{id}")
 	public String showFormForUpdate(@PathVariable ( value = "id") long id, Model model) {
 
@@ -93,10 +101,12 @@ public class UserController {
 
 		// set Customer as a model attribute to pre-populate the form
 		model.addAttribute("customer", customer);
+		model.addAttribute("isAdmin",invoicesController.hasRole(RoleEnum.Code.ROLE_ADMIN));
+
 		return "update_Customer";
 	}
 
-	@Secured("ROLE_ADMIN")
+	@Secured(RoleEnum.Code.ROLE_ADMIN)
 	@GetMapping("/deleteCustomer/{id}")
 	public String deleteCustomer(@PathVariable (value = "id") long id) {
 
@@ -105,7 +115,7 @@ public class UserController {
 		return "redirect:/listCustomer?delete";
 	}
 
-	@Secured("ROLE_ADMIN")
+	@Secured(RoleEnum.Code.ROLE_ADMIN)
 	@GetMapping("/pageCustomer/{pageNo}")
 	public String findPaginated(@PathVariable (value = "pageNo") int pageNo,
 			@RequestParam("sortField") String sortField,
@@ -123,6 +133,7 @@ public class UserController {
 		model.addAttribute("sortField", sortField);
 		model.addAttribute("sortDir", sortDir);
 		model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+		model.addAttribute("isAdmin",invoicesController.hasRole(RoleEnum.Code.ROLE_ADMIN));
 
 		model.addAttribute("listCustomers", listCustomers);
 		return "index";

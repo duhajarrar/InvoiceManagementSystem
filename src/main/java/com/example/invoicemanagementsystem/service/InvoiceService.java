@@ -1,6 +1,8 @@
 package com.example.invoicemanagementsystem.service;
 
 import com.example.invoicemanagementsystem.model.Invoice;
+import com.example.invoicemanagementsystem.model.Role;
+import com.example.invoicemanagementsystem.model.RoleEnum;
 import com.example.invoicemanagementsystem.model.User;
 import com.example.invoicemanagementsystem.repository.InvoiceRepository;
 import com.example.invoicemanagementsystem.repository.UserRepository;
@@ -50,9 +52,9 @@ public class InvoiceService {
 
 		Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
 		User user = userService.getUserById(userId);
-		if ("ROLE_USER".equals(user.getAuthorities().get(0).getAuthority())){
+		if (RoleEnum.ROLE_USER.equals(user.getAuthorities().get(0).getAuthority())){
 			return this.invoiceRepository.findInvoiceByUser_Id(userId, pageable);
-		}else if("ROLE_ADMIN".equals(user.getAuthorities().get(0).getAuthority())||"ROLE_AUDIOTR".equals(user.getAuthorities().get(0).getAuthority())){
+		}else if(RoleEnum.ROLE_ADMIN.equals(user.getAuthorities().get(0).getAuthority())|| RoleEnum.ROLE_AUDIOTR.equals(user.getAuthorities().get(0).getAuthority())){
 			return this.invoiceRepository.findAll(pageable);
 		}else{
 			return null;

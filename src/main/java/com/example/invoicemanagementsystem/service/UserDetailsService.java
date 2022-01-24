@@ -37,8 +37,8 @@ public class UserDetailsService implements org.springframework.security.core.use
 		List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
 		
 		for(Role role: user.getAuthorities()) {
-			logger.info("Role: ".concat(role.getAuthority()));
-			authorities.add(new SimpleGrantedAuthority(role.getAuthority()));
+			logger.info("Role: ".concat(role.getAuthority().getAuthority()));
+			authorities.add(new SimpleGrantedAuthority(role.getAuthority().getAuthority()));
 		}
 		
 		if(authorities.isEmpty()) {

@@ -1,33 +1,113 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Customer Management System</title>
+
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+          crossorigin="anonymous">
+
+</head>
+<style>
+    .navbar {
+        background-color: #41a4bf;
+    }
+</style>
 <body>
+<nav class="navbar navbar-inverse navbar-fixed-top" style="background-color: #41a4bf;">
+    <div class="container" style="float:left;display: flex; flex-direction: row;flex: 50px">
+        <!--			<img th:src="@{../static/img/payment.png}" width="40" height="40"/>-->
+        <h3 class="btn fas fa-file-invoice-dollar" style="font-size: 24px;color:white;">  Invoice Management System </h3>
+        <div th:if="${isAdmin}" style="">
+            <a th:href="@{/listCustomer}" class="btn" style="color:white;background-color: darkmagenta">Show Customers List</a>
+            <!--	<a th:href="" class="btn" style="font-size:24px;color:white;background-color: cadetblue">Show Files List</a>-->
+            <a th:href="@{/listInvoice}" class="btn" style="color:white;background-color: crimson">Show Invoices List</a>
+        </div>
+        <a class="navbar-brand" style="margin-left: 10px;color:white;" href="#" th:href="@{/logout}">Logout </a>
 
-<!--<h1>Upload File</h1>-->
+    </div>
 
-<!--<hr/>-->
+</nav>
 
-<!--<h4>Upload Single File:</h4>-->
-<!--<form method="POST" enctype="multipart/form-data" th:action="@{/upload-file}">-->
-<!--    <input type="file" name="file"> <br/><br/>-->
-<!--    <button type="submit">Submit</button>-->
-<!--</form>-->
 
-<!--<hr/>-->
+<div class="container my-2">
+    <h1>Attachments List</h1>
+    <div th:if="${param.success}">
+        <div class="alert alert-info">File successfully added!</div>
+    </div>
 
-<!--<h4>Upload Multiple Files:</h4>-->
-<!--<form method="POST" enctype="multipart/form-data" th:action="@{/upload-multiple-files}">-->
-<!--    <input type="file" name="files" multiple> <br/><br/>-->
-<!--    <button type="submit">Submit</button>-->
-<!--</form>-->
+    <div th:if="${param.success1}">
+        <div class="alert alert-info">File info updated!</div>
+    </div>
 
-<!--<hr/>-->
+    <div th:if="${param.delete}">
+        <div class="alert alert-info">File deleted successfully!</div>
+    </div>
+    <br>
+    <br>
+    <a th:href = "@{/listInvoice}" style=""> Back to Invoices List</a>
 
-<h2>All Uploaded Files:</h2>
-<ul>
-    <li th:each="file : ${files}">
-        <a th:href="${file}" target="_blank" th:text="${file.uri}"></a>
-    </li>
-</ul>
 
+    <hr>
+    <h2>All Uploaded Files:</h2>
+    <table border="1" class = "table table-striped table-responsive-md">
+        <thead>
+        <tr>
+            <th>
+                <a th:href="@{'/pageFile/' + ${currentPage} + '?sortField=id&sortDir=' + ${reverseSortDir}}">
+                    Id</a>
+            </th>
+            <th>
+                <a th:href="@{'/pageFile/' + ${currentPage} + '?sortField=name&sortDir=' + ${reverseSortDir}}">
+                    Name</a>
+            </th>
+            <th>
+                <a th:href="@{'/pageFile/' + ${currentPage} + '?sortField=type&sortDir=' + ${reverseSortDir}}">
+                    Type</a>
+            </th>
+            <th>
+                <a th:href="@{'/pageFile/' + ${currentPage} + '?sortField=size&sortDir=' + ${reverseSortDir}}">
+                    Size</a>
+            </th>
+            <th> Actions </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="file : ${files}">
+            <td th:text="${file.id}"></td>
+            <td th:text="${file.name}"></td>
+            <td th:text="${file.type}"></td>
+            <td th:text="${file.size}"></td>
+            <td><a th:href="${file.uri}" target="_blank" th:text="Download"></a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+<!--    <div>-->
+<!--        <div class = "row col-sm-10">-->
+<!--            <div class = "col-sm-2">-->
+<!--                Total Rows: [[${totalItems}]]-->
+<!--            </div>-->
+<!--            <div class = "col-sm-1">-->
+<!--					<span th:each="i: ${#numbers.sequence(1, totalPages)}">-->
+<!--						<a th:if="${currentPage != i}" th:href="@{'/pageFile/' + ${i}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">[[${i}]]</a>-->
+<!--						<span th:unless="${currentPage != i}">[[${i}]]</span>  &nbsp; &nbsp;-->
+<!--					</span>-->
+<!--            </div>-->
+<!--            <div class = "col-sm-1">-->
+<!--                <a th:if="${currentPage < totalPages}" th:href="@{'/pageFile/' + ${currentPage + 1}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Next</a>-->
+<!--                <span th:unless="${currentPage < totalPages}">Next</span>-->
+<!--            </div>-->
+
+<!--            <div class="col-sm-1">-->
+<!--                <a th:if="${currentPage < totalPages}" th:href="@{'/pageFile/' + ${totalPages}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Last</a>-->
+<!--                <span th:unless="${currentPage < totalPages}">Last</span>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+</div>
 </body>
 </html>
