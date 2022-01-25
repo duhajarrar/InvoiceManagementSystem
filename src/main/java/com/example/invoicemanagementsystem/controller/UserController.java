@@ -35,7 +35,6 @@ public class UserController {
 
 	protected final Log logger = LogFactory.getLog(this.getClass());
 
-	// display list of Users
 	@Secured(RoleEnum.Code.ROLE_ADMIN)
 	@GetMapping("/listCustomer")
 	public String viewHomePage(Model model, Authentication authentication) {
@@ -46,8 +45,10 @@ public class UserController {
 		//System.out.println(authentication.getName());
 		return findPaginated(1, "firstName", "asc", model);
 	}
-@Autowired
-InvoicesController invoicesController;
+
+	@Autowired
+	InvoicesController invoicesController;
+
 	@Secured(RoleEnum.Code.ROLE_ADMIN)
 	@GetMapping("/showNewCustomerForm")
 	public String showNewCustomerForm(Model model) {

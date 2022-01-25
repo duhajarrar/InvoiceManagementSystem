@@ -67,7 +67,14 @@ public class InvoiceService {
 				Sort.by(sortField).descending();
 
 		Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
-		return this.invoiceRepository.search(keyword,userId,pageable);
+		User user = userService.getUserById(userId);
+		if (RoleEnum.ROLE_USER.equals(user.getAuthorities().get(0).getAuthority())) {
+			return this.invoiceRepository.searchInvoice(keyword, userId, pageable);
+		}else if(RoleEnum.ROLE_ADMIN.equals(user.getAuthorities().get(0).getAuthority())|| RoleEnum.ROLE_AUDIOTR.equals(user.getAuthorities().get(0).getAuthority())) {
+			return this.invoiceRepository.searchAll(keyword, pageable);
+
+		}
+		return null;
 	}
 
 

@@ -2,7 +2,6 @@ package com.example.invoicemanagementsystem.controller;
 
 import com.example.invoicemanagementsystem.model.FileResponse;
 import com.example.invoicemanagementsystem.model.Invoice;
-import com.example.invoicemanagementsystem.model.Role;
 import com.example.invoicemanagementsystem.model.RoleEnum;
 import com.example.invoicemanagementsystem.service.FileResposeService;
 import com.example.invoicemanagementsystem.service.InvoiceService;
@@ -32,8 +31,6 @@ public class FileController {
 
     @Autowired
     private FileResposeService fileResposeService;
-//    @Autowired
-//    private FileResponseService fileResponseService;
 
     @Autowired
     private InvoicesController invoicesController;
@@ -67,24 +64,29 @@ public class FileController {
     @GetMapping("/upload-file/id/{idInvoice}")
     @ResponseBody
     public FileResponse uploadFile(@RequestParam("file") MultipartFile file,@PathVariable ( value = "idInvoice") long idInvoice){
-        String name = storageService.store(file);
-      //  fileResponseService.save(file);
-        String uri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/download/")
-                .path(name)
-                .toUriString();
-        Invoice invoice=invoiceService.getInvoiceById(idInvoice);
-        fileResposeService.saveFile(new FileResponse(invoice,name, uri, file.getContentType(), file.getSize()));
-        return new FileResponse(invoice,name, uri, file.getContentType(), file.getSize());
+        if(!file.isEmpty()) {
+            String name = storageService.store(file);
+            String uri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                    .path("/download/")
+                    .path(name)
+                    .toUriString();
+            Invoice invoice = invoiceService.getInvoiceById(idInvoice);
+            fileResposeService.saveFile(new FileResponse(invoice, name, uri, file.getContentType(), file.getSize()));
+            return new FileResponse(invoice, name, uri, file.getContentType(), file.getSize());
+        }
+        return null;
     }
 
     @PostMapping("/upload-multiple-files/id/{idInvoice}")
-//    @ResponseBody
     public String uploadMultipleFiles(@RequestParam("files") MultipartFile[] files, @PathVariable ( value = "idInvoice") long idInvoice){
+        if(files.length!=0){
         Arrays.stream(files)
                 .map(file -> uploadFile(file,idInvoice))
                 .collect(Collectors.toList());
-        return "redirect:/viewFiles/{idInvoice}";
+            return "redirect:/viewFiles/{idInvoice}";
+        }else{
+            return "redirect:/viewFiles/{idInvoice}";
+        }
 
     }
 

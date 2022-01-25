@@ -26,7 +26,7 @@ public class UserService {
 	@Autowired
 	private UserRepository userRepository;
 
-	    public UserService(UserRepository userRepository) {
+	public UserService(UserRepository userRepository) {
         super();
         this.userRepository = userRepository;
     }
@@ -50,10 +50,10 @@ public class UserService {
 		}
 	}
 	public void updateUser(User registration) {
+			System.out.println(registration.toString());
+		userRepository.deleteById(registration.getId());
 		userRepository.save(registration);
 	}
-
-
 	public User getUserById(long id) {
 		User user = userRepository.findById(id);
 		if (user!=null) {
@@ -62,11 +62,9 @@ public class UserService {
 			throw new RuntimeException(" Invoice not found for id :: " + id);
 		}
 	}
-
 	public void deleteUserById(long id) {
 		userRepository.deleteById(id);
 	}
-
 	public Page<User> findPaginated(int pageNo, int pageSize, String sortField, String sortDirection) {
 		Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() :
 			Sort.by(sortField).descending();
@@ -74,24 +72,25 @@ public class UserService {
 		Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
 
 		List<User> users=userRepository.findAll();
-		for (User user:users) {
-			if((user.getAuthorities().get(0).getAuthority().getAuthority()).equals(RoleEnum.Code.ROLE_ADMIN)) {
-				users.remove(user);
+		for (int i=0;i<users.size();i++) {
+			User user=users.get(i);
+			System.out.println(user.getAuthorities().get(0).getAuthority().getAuthority());
+			System.out.println(RoleEnum.Code.ROLE_ADMIN);
+			if(user.getAuthorities().get(0).getAuthority().getAuthority().equals(RoleEnum.Code.ROLE_ADMIN)) {
+				users.remove(i);
+				System.out.println(i);
 			}
 		}
 		Page<User> userPage=new PageImpl<User>(users,pageable,users.size());
 		return userPage;
 	}
-
-private List<? extends GrantedAuthority> mapRolesToAuthorities(List<Role> roles) {
-	return roles.stream().map(role -> new SimpleGrantedAuthority(role.getAuthority().toString()))
+	private List<? extends GrantedAuthority> mapRolesToAuthorities(List<Role> roles) {
+	return roles.stream().map(role -> new SimpleGrantedAuthority(role.getAuthority().getAuthority()))
 			.collect(Collectors.toList());
 }
 	public List<User> getAll() {
 		return userRepository.findAll();
 	}
-
-
 	public User findByUsername(String username) {
 			return userRepository.findByUsername(username);
 	}

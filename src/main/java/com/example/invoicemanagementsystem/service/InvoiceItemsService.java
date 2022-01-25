@@ -18,7 +18,8 @@ public class InvoiceItemsService {
 
     @Autowired
     private InvoiceRepository invoiceRepository;
-    public List<InvoiceItems> getAllInvoiceItems() {
+
+    public List<InvoiceItems> getAllInvoiceItems() throws NullPointerException {
         return invoiceItemsRepository.findAll();
     }
 
@@ -26,7 +27,7 @@ public class InvoiceItemsService {
         this.invoiceItemsRepository.save(invoiceItem);
     }
 
-    public InvoiceItems getInvoiceItemsById(long id) {
+    public InvoiceItems getInvoiceItemsById(long id)throws NullPointerException {
         InvoiceItems invoiceItems = invoiceItemsRepository.findById(id);
         if (invoiceItems!=null) {
             return invoiceItems;
@@ -35,7 +36,7 @@ public class InvoiceItemsService {
         }
     }
 
-    public InvoiceItems getInvoiceItemsByItemId(Long invoiceId,Long id){
+    public InvoiceItems getInvoiceItemsByItemId (Long invoiceId,Long id) throws NullPointerException {
         Invoice invoice=invoiceRepository.findById(invoiceId).orElse(null);
         List<InvoiceItems> list = invoice.getItems();
         for (int i=0;i<list.size();i++){

@@ -5,16 +5,22 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlTransient;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Entity
 @Table(name = "invoices")
-public class Invoice {
+public class Invoice implements Serializable {
+    private static final long serialVersionUID = 2699282209351614842L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column
+    private Long compnumber;
 
     @Column
     private String title;
@@ -92,6 +98,13 @@ public class Invoice {
         this.user = user;
     }
 
+    public Long getCompnumber() {
+        return compnumber;
+    }
+
+    public void setCompnumber(Long compnumber) {
+        this.compnumber = compnumber;
+    }
 
     public List<InvoiceItems> getItems() {
         return items;
@@ -115,6 +128,7 @@ public class Invoice {
     public void deleteItem(InvoiceItems item) {
         this.items.remove(items.indexOf(item));
     }
+
 
     public long getTotal() {
         this.total = (long) 0.0;

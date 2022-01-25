@@ -100,7 +100,7 @@ public class InvoicesController {
 //	@GetMapping("/addItemToInvoivce/invoiceId/{idInvoice}/itemId/{idItem}/quantity/{quantity}/discount/{discount}")
 	@Secured({RoleEnum.Code.ROLE_ADMIN,RoleEnum.Code.ROLE_USER})
 	@GetMapping("/addItemToInvoivce/invoiceId/{idInvoice}/itemId/{idItem}")
-	public String addItemToInvoice(@PathVariable ( value = "idInvoice") long idInvoice,@PathVariable ( value = "idItem") long idItem,@RequestParam("discount1") Integer discount,@RequestParam("quantity1") Integer quantity,Model model) throws ParseException {
+	public String addItemToInvoice(@PathVariable ( value = "idInvoice") long idInvoice,@PathVariable ( value = "idItem") long idItem,@RequestParam(value = "discount1",defaultValue = "0") Integer discount,@RequestParam(value = "quantity1",defaultValue = "1") Integer quantity,Model model) throws ParseException {
 //		quantity=1;
 //		discount=0;
 
@@ -176,7 +176,7 @@ public class InvoicesController {
 
 	@Secured({RoleEnum.Code.ROLE_ADMIN,RoleEnum.Code.ROLE_USER})
 	@GetMapping("/updateItemFromInvoivce/invoiceId/{idInvoice}/InvoiceitemId/{idInvoiceitem}")
-		public String updateItemFromInvoivce(@PathVariable ( value = "idInvoice") long idInvoice,@PathVariable ( value = "idInvoiceitem") long idInvoiceitem,@RequestParam("discount2") Integer discount,@RequestParam("quantity2") Integer quantity,Model model) throws ParseException {
+	public String updateItemFromInvoivce(@PathVariable ( value = "idInvoice") long idInvoice,@PathVariable ( value = "idInvoiceitem") long idInvoiceitem,@RequestParam("discount2") Integer discount,@RequestParam("quantity2") Integer quantity,Model model) throws ParseException {
 		System.out.println("+++++++++++++++++++ *********** "+quantity+"          "+discount);
 		Invoice invoice=invoiceService.getInvoiceById(idInvoice);
 		InvoiceItems invoiceItem=invoiceItemsService.getInvoiceItemsById(idInvoiceitem);
@@ -403,8 +403,9 @@ public class InvoicesController {
 		}
 		return true;
 	}
-@GetMapping("/")
-public String home(){
+
+	@GetMapping("/")
+	public String home(){
 		return "home";
 }
 

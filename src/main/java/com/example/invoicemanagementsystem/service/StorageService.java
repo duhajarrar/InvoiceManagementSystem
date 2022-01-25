@@ -28,7 +28,6 @@ public class StorageService{
         this.rootLocation = Paths.get(properties.getLocation());
     }
 
-
     @PostConstruct
     public void init() {
         try {
@@ -37,7 +36,6 @@ public class StorageService{
             throw new StorageException("Could not initialize storage location", e);
         }
     }
-
 
     public String store(MultipartFile file) {
         String filename = StringUtils.cleanPath(file.getOriginalFilename());
@@ -63,7 +61,6 @@ public class StorageService{
         return filename;
     }
 
-
     public Stream<Path> loadAll() {
         try {
             return Files.walk(this.rootLocation, 1)
@@ -76,11 +73,9 @@ public class StorageService{
 
     }
 
-
     public Path load(String filename) {
         return rootLocation.resolve(filename);
     }
-
 
     public Resource loadAsResource(String filename) {
         try {
@@ -98,7 +93,6 @@ public class StorageService{
             throw new FileNotFoundException("Could not read file: " + filename, e);
         }
     }
-
 
     public void deleteAll() {
         FileSystemUtils.deleteRecursively(rootLocation.toFile());

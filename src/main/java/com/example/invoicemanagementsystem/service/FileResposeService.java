@@ -21,15 +21,17 @@ public class FileResposeService {
     private FileResposeRepository fileResposeRepository;
 
 
-    public List<FileResponse> getAllFiles() {
+    public List<FileResponse> getAllFiles() throws FileNotFoundException {
         return fileResposeRepository.findAll();
     }
 
-    public void saveFile(FileResponse file) {
-        this.fileResposeRepository.save(file);
+    public void saveFile(FileResponse file) throws StorageException, RuntimeException {
+        if(file!=null){
+            this.fileResposeRepository.save(file);
+        }
     }
 
-    public FileResponse getFileById(long id) {
+    public FileResponse getFileById(long id) throws FileNotFoundException {
         FileResponse file = fileResposeRepository.findById(id);
         if (file!=null) {
             return file;
@@ -38,14 +40,14 @@ public class FileResposeService {
         }
     }
 
-    public List<FileResponse> getFileByInvoiceId(long idInvoice) {
+    public List<FileResponse> getFileByInvoiceId(long idInvoice)throws FileNotFoundException {
        List<FileResponse> files = fileResposeRepository.getFileByInvoiceId(idInvoice);
        return files;
     }
 
     @Autowired
     UserService userService;
-    public Page<FileResponse> findPaginated(int pageNo, int pageSize, String sortField, String sortDirection,Long id,Long userId) {
+    public Page<FileResponse> findPaginated(int pageNo, int pageSize, String sortField, String sortDirection,Long id,Long userId) throws FileNotFoundException {
         Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() :
                 Sort.by(sortField).descending();
         User user = userService.getUserById(userId);

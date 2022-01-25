@@ -38,18 +38,23 @@
 	<div class="container my-2">
 <!--<h3 style="margin-left: 50px" th:value="${name}"></h3>-->
 <div th:if="${isAdminOrUser}">
-		<form  action="#" th:action="@{/saveInvoice}" th:object="${invoice}" style="background-color: aliceblue;border-color: aliceblue;border-radius: 15px;border-style: solid;margin-bottom: 30px;width: 1070px;height: 150px"
+		<form  action="#" th:action="@{/saveInvoice}" th:object="${invoice}" style="background-color: aliceblue;border-color: aliceblue;border-radius: 15px;border-style: solid;margin-bottom: 30px;width: 1070px;height: 300px"
 			  method="POST">
-			<h4 style="margin-left:50px;margin-top: 20px">Create new Invoice</h4>
+			<h4 style="margin-left:400px;margin-top: 20px">Create new Invoice</h4>
+			<div style="float:left;display: flex; flex-direction: column;flex: 50px;margin-left: 250px">
 
 			<div style="float:left;display: flex; flex-direction: row;flex: 50px;padding-top: 15px;padding-left: 50px">
-			<input type="text" th:field="*{title}"
-				   placeholder="Title" class="form-control mb-4 col-4">
+				<input type="text" th:field="*{compnumber}"
+					   placeholder="Number" class="form-control mb-4 col-4">
 
+				<input type="text" th:field="*{title}" style="margin-left: 25px;width: 400px"
+				   placeholder="Title" class="form-control mb-4 col-4">
+			</div>
+			<div style="float:left;display: flex; flex-direction: row;flex: 50px;padding-top: 15px;padding-left: 30px">
 			<input type="text" th:field="*{description}"
 				   placeholder="Description" class="form-control mb-4 col-4" style="margin-left:20px;">
 
-			<input type="date" th:field="*{creationDate}" style="margin-left:20px;"
+			<input type="date" th:field="*{creationDate}" style="margin-left:20px;width: 250px;"
 				   placeholder="creationDate" class="form-control mb-4 col-4">
 
 			<!--			<input type="text" name="search_product" id="search_product" placeholder='Search Item'-->
@@ -57,8 +62,8 @@
 
 			<input type="hidden" th:field="*{total}"
 				   placeholder="total" class="form-control mb-4 col-4">
-
-			<button style="margin-left:30px;height: 40px" type="submit" class="btn btn-info" > Add Invoice</button>
+</div>
+			<button style="margin-left:100px;height: 40px;width: 350px" type="submit" class="btn btn-info" > Add Invoice</button>
 			</div>
 		</form>
 <!--		</div>-->

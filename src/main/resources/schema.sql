@@ -31,6 +31,7 @@ CREATE TABLE authorities (
 DROP TABLE IF EXISTS Invoices ;
 CREATE TABLE Invoices (
                            id long AUTO_INCREMENT PRIMARY KEY NOT NULL,
+                           compnumber long NOT NULL ,
                            title VARCHAR(250) NOT NULL,
                            creation_date DATE NOT NULL,
                            description VARCHAR(250) NOT NULL,
